@@ -1,4 +1,13 @@
-interface IRootStoreState {
+interface IUser {
+    email: string
+    password: string
+    firstName: string
+    lastName: string
+    birthday: Date
 }
 
-export { IRootStoreState }
+interface IRootStoreState {
+    user: IUser | null
+}
+
+export { IUser, IRootStoreState }
