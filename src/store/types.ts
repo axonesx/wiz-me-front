@@ -1,0 +1,4 @@
+interface IRootStoreState {
+}
+
+export { IRootStoreState }

@@ -1,18 +1,21 @@
-import { createStore } from 'vuex'
+
+import Vuex from 'vuex'
 import state from '@/store/state'
 import getters from '@/store/getters'
 import actions from '@/store/actions'
 import mutations from '@/store/mutations'
-import modules from '@/store/modules'
-
-
+import exemple from './module/exemple'
 
 const conf = {
+  modules: {
+    exemple,
+  },
   state,
   getters,
   mutations,
   actions,
-  modules
 }
 
-export default createStore(conf)
+const store = new Vuex.Store(conf)
+
+export { store }
