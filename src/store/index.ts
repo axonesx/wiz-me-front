@@ -5,10 +5,13 @@ import getters from './getters'
 import actions from './actions'
 import mutations from './mutations'
 import exemple from './module/exemple'
+import authentication from './module/authentication'
+import user from './module/user'
 
 const conf = {
   modules: {
-    exemple,
+    user,
+    authentication,
   },
   state,
   getters,

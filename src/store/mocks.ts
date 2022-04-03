@@ -1,5 +1,7 @@
 const initialState = {
     user: null,
+    parameters: null,
+    isFetchingParameters: false,
 }
 
 const mocks = {
