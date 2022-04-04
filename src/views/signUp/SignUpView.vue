@@ -59,6 +59,7 @@
       <Datepicker 
         class="mb-6" 
         v-model="date"
+        :enableTimePicker="false"
         @blur="disableButton"
         @cleared="disableButton"
         required
@@ -86,16 +87,17 @@ import router from '../../router'
 import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import { isItemsExist } from '../../services/utils.service'
+import { ref } from 'vue';
 
 const passwordRegex = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
 const isPassword = (value) => value.match(passwordRegex)
 
 export default {
   components: { Datepicker },
-  setup () {            
+  setup () {         
     return {
-              v$: useVuelidate()
-            }
+      v$: useVuelidate(),
+    }
   },
 
   data() {
@@ -104,7 +106,7 @@ export default {
       password: '',
       confirmPassword: '',
       firstName: '',
-      lastName:'',
+      lastName: '',
       date: '',
       menu: false,
       valid: true,
@@ -198,7 +200,8 @@ export default {
     async signUp () {
       const isFormCorrect = await this.v$.$validate()
       if (isFormCorrect) {
-        const { email, password, firstName, lastName, birthday } = this
+        const { email, password, firstName, lastName } = this
+        const birthday = this.date
         store.dispatch('signupUser', { email, password, firstName, lastName, birthday } ).then(() => {
           router.push('/')
         })
