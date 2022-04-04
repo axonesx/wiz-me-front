@@ -2,23 +2,43 @@ import { IMutation, IMutationWithoutPayload } from '@/store/types/mutation'
 import { AUTH_REQUEST } from './mutation-types'
 import { AUTH_SUCCESS } from './mutation-types'
 import { AUTH_ERROR } from './mutation-types'
+import { LOGOUT_REQUEST } from './mutation-types'
+import { LOGOUT_SUCCESS } from './mutation-types'
+import { LOGOUT_ERROR } from './mutation-types'
 import { IState } from './types'
 
 const authRequest: IMutationWithoutPayload<IState> = (state) => {
-  state.status = 'loading'
+  state.authStatus = 'loading'
 }
 
 const authSuccess: IMutation<IState, string> = (state, token) => {
-  state.status = 'success'
+  state.authStatus = 'success'
   state.token = token
 }
 
 const authErro: IMutationWithoutPayload<IState> = (state) => {
-  state.status = 'error'
+  state.authStatus = 'error'
 } 
+
+const logoutRequest: IMutationWithoutPayload<IState> = (state) => {
+  state.logoutStatus = 'loading'
+}
+
+const logoutSuccess: IMutation<IState, string> = (state, token) => {
+  state.logoutStatus = 'success'
+  state.token = token
+}
+
+const logoutError: IMutationWithoutPayload<IState> = (state) => {
+  state.logoutStatus = 'error'
+} 
+
 
 export default {
   [AUTH_REQUEST]: authRequest,
   [AUTH_SUCCESS]: authSuccess,
   [AUTH_ERROR]: authErro,
+  [LOGOUT_REQUEST]: logoutRequest, 
+  [LOGOUT_SUCCESS]: logoutSuccess, 
+  [LOGOUT_ERROR]: logoutError,
  }

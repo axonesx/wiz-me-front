@@ -1,6 +1,7 @@
 interface IState {
     token: string,
-    status: string,
+    logoutStatus: string,
+    authStatus: string,
 }
 
 export { IState }

@@ -1,11 +1,10 @@
 <template>
   <v-card
-    width="450px"
-    class="pa-6 mt-12 mx-auto min-width=300px">
+    class="signup-card pa-6 mt-12 mx-auto">
 
     <v-card-header>
       <v-card-header-text>
-        <v-card-title>Sign-Up</v-card-title>
+        <v-card-title>Sign Up</v-card-title>
         <v-card-subtitle>
           <span class="mr-1">Please register yourself</span>
         </v-card-subtitle>
@@ -70,7 +69,7 @@
         class="float-right"
         color="success"
         :disabled="valid"
-        @click="login"
+        @click="signUp"
       >
         login
       </v-btn>
@@ -196,11 +195,11 @@ export default {
         this.valid=true
       }
     },
-    async login () {
+    async signUp () {
       const isFormCorrect = await this.v$.$validate()
       if (isFormCorrect) {
-        const { email, password } = this
-        store.dispatch('loginUser', { email, password }).then(() => {
+        const { email, password, firstName, lastName, birthday } = this
+        store.dispatch('signupUser', { email, password, firstName, lastName, birthday } ).then(() => {
           router.push('/')
         })
       } 
@@ -210,8 +209,12 @@ export default {
 }
 </script>
 
+
 <style scoped>
 a {
-  text-decoration: none;
+  text-decoration: none
+}
+.signup-card {
+    width:450px
 }
 </style>
