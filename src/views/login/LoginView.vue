@@ -2,6 +2,16 @@
   <v-card
     width="450px"
     class="pa-6 mt-12 mx-auto min-width=300px">
+
+    <v-card-header>
+      <v-card-header-text>
+        <v-card-title>Log-In</v-card-title>
+        <v-card-subtitle>
+          <span class="mr-1">Please identify yourself</span>
+        </v-card-subtitle>
+      </v-card-header-text>
+    </v-card-header>
+
     <form
     @change="disableButton"
     @blur="disableButton">
@@ -21,7 +31,7 @@
         @input="v$.password.$touch()"
         @blur="v$.password.$touch()"
       ></v-text-field>
-      <span class="float-left">Not yet registered ? <a href="/sign-up">Sign-up here</a></span>
+      <span class="float-left">Not yet registered ? <a href="/sign-up">Sign Up here</a></span>
       <v-btn
         class="float-right"
         color="success"
@@ -39,6 +49,7 @@ import useVuelidate from '@vuelidate/core'
 import { required, email } from '@vuelidate/validators'
 import { store } from '../../store'
 import router from '../../router'
+import { isItemsExist } from '../../services/utils.service'
 
 export default {
   setup () {
@@ -83,10 +94,9 @@ export default {
     },
   },  
   methods: {  
-    disableButton () {
-      const isFormCorrect = this.v$.$errors.length === 0
-      console.log(this.v$)
-      console.log(this.v$.$errors.length )
+    async disableButton () {
+      const isAllRequiredItemsExist = isItemsExist([this.email,this.password])
+      const isFormCorrect = this.v$.$errors.length === 0 && isAllRequiredItemsExist
       if (isFormCorrect) {
         this.valid=false
       } else {
@@ -106,3 +116,9 @@ export default {
   
 }
 </script>
+
+<style scoped>
+a {
+  text-decoration: none;
+}
+</style>

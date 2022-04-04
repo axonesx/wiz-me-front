@@ -3,10 +3,12 @@ import { store } from '@/store'
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import HomeView from '../views/home/HomeView.vue'
 import LoginView from '../views/login/LoginView.vue'
+import SignUpView from '../views/signUp/SignUpView.vue'
 import NotFoundView from '../views/notFound/NotFoundView.vue'
 
 const HOME_PAGE_PATH = '/home'
 const LOGIN_PAGE_PATH = '/login'
+const SIGN_UP_PAGE_PATH = '/sign-up'
 const NOT_FOUND_PAGE_PATH = '/not-found'
 
 const routes: Array<RouteRecordRaw> = [
@@ -33,6 +35,11 @@ const routes: Array<RouteRecordRaw> = [
     component: LoginView
   },
   {
+    path: SIGN_UP_PAGE_PATH,
+    name: 'sign-up',
+    component: SignUpView
+  },
+  {
     path: NOT_FOUND_PAGE_PATH,
     name: 'not-found',
     component: NotFoundView
@@ -57,7 +64,7 @@ const isAuthenticated = () => {
 
 router.beforeEach(async (to) => {
   await handleFetchParameters()
-  if ( !isAuthenticated() && to.name !== 'login'){
+  if ( !isAuthenticated() && to.name !== 'login' && to.name !== 'sign-up'){
     return { name: 'login' }
   }
 })
