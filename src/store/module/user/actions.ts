@@ -11,12 +11,12 @@ const requestUser: IAction<IState, number> = ({ commit, dispatch }, id) => {
   httpClientApi
   .post(`/${id}`)
     .then(resp => {
-      commit(USER_SUCCESS, resp);
+      commit(USER_SUCCESS, resp)
     })
     .catch(() => {
-      commit(USER_ERROR); 
-      dispatch('loginUser');
-    });
+      commit(USER_ERROR) 
+      dispatch('loginUser')
+    })
 }
 
 export default {

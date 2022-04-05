@@ -7,5 +7,6 @@ export function addAuthenticationToken(config: AxiosRequestConfig): AxiosRequest
         config.headers.Authorization = `Bearer ${token}`
     }
     return config
-    
 }
+
+ 

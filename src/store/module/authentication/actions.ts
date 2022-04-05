@@ -11,12 +11,10 @@ const loginUser: IAction<IState, string> = ({commit, dispatch }, user) => {
     httpClientApi
     .post('/login', user)
       .then(resp => {
-        const token = resp.data.token
-        console.log(token)
-        console.log(resp)
-        setTokenInLocalStorage(token)
-        commit(AUTH_SUCCESS, token)
-        commit(USER_SUCCESS, resp)
+        const xsrfToken = resp.data.xsrfToken
+        setTokenInLocalStorage(xsrfToken)
+        commit(AUTH_SUCCESS, xsrfToken)
+        commit(USER_SUCCESS, resp.data.findUser)
         resolve(resp)
       })
     .catch(err => {
