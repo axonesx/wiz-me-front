@@ -2,7 +2,7 @@ import { getTokenFromLocalStorage } from "@/services/local-storage.service"
 import { IState } from "./types"
 
 const state: IState = {
-    token: getTokenFromLocalStorage() || '',
+    token: getTokenFromLocalStorage() || null,
     authStatus: '',
     logoutStatus: '',
 }

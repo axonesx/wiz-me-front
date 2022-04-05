@@ -1,7 +1,7 @@
 interface IState {
-    token: string,
-    logoutStatus: string,
+    token: string | null,
     authStatus: string,
+    logoutStatus: string,
 }
 
-export { IState }
+export { IState, }

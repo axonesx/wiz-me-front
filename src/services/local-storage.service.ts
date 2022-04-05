@@ -3,16 +3,16 @@ enum LocalStorageKeys {
 }
 
 const getTokenFromLocalStorage = () => {
-    return localStorage.getItem(LocalStorageKeys.TOKEN) || null
+    return localStorage.getItem(LocalStorageKeys.TOKEN)
 }
 
 const setTokenInLocalStorage = (token: string):void => {
-    localStorage.setItem(LocalStorageKeys.TOKEN, token) 
+    localStorage.setItem(LocalStorageKeys.TOKEN, token)
 }
 
 
 const removeTokenInLocalStorage = ():void => {
-    localStorage.removeItem(LocalStorageKeys.TOKEN) 
+    localStorage.removeItem(LocalStorageKeys.TOKEN)
 }
 
 export {

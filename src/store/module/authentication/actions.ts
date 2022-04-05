@@ -11,7 +11,7 @@ const loginUser: IAction<IState, string> = ({commit, dispatch }, user) => {
     httpClientApi
     .post('/login', user)
       .then(resp => {
-        const token = resp.request.cookie['Authorization']
+        const token = resp.data.token
         console.log(token)
         console.log(resp)
         setTokenInLocalStorage(token)

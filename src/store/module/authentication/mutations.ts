@@ -18,27 +18,27 @@ const authSuccess: IMutation<IState, string> = (state, token) => {
 
 const authErro: IMutationWithoutPayload<IState> = (state) => {
   state.authStatus = 'error'
-} 
+}
 
 const logoutRequest: IMutationWithoutPayload<IState> = (state) => {
   state.logoutStatus = 'loading'
 }
 
-const logoutSuccess: IMutation<IState, string> = (state, token) => {
+const logoutSuccess: IMutationWithoutPayload<IState> = (state) => {
   state.logoutStatus = 'success'
-  state.token = token
+  state.token = null
 }
 
 const logoutError: IMutationWithoutPayload<IState> = (state) => {
   state.logoutStatus = 'error'
-} 
+}
 
 
 export default {
   [AUTH_REQUEST]: authRequest,
   [AUTH_SUCCESS]: authSuccess,
   [AUTH_ERROR]: authErro,
-  [LOGOUT_REQUEST]: logoutRequest, 
-  [LOGOUT_SUCCESS]: logoutSuccess, 
+  [LOGOUT_REQUEST]: logoutRequest,
+  [LOGOUT_SUCCESS]: logoutSuccess,
   [LOGOUT_ERROR]: logoutError,
  }
