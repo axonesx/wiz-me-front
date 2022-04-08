@@ -13,7 +13,6 @@ const authRequest: IMutationWithoutPayload<IState> = (state) => {
 
 const authSuccess: IMutation<IState, string> = (state, token) => {
   state.authStatus = 'success'
-  state.token = token
 }
 
 const authErro: IMutationWithoutPayload<IState> = (state) => {
@@ -26,7 +25,6 @@ const logoutRequest: IMutationWithoutPayload<IState> = (state) => {
 
 const logoutSuccess: IMutationWithoutPayload<IState> = (state) => {
   state.logoutStatus = 'success'
-  state.token = null
 }
 
 const logoutError: IMutationWithoutPayload<IState> = (state) => {

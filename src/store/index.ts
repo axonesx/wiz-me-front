@@ -10,9 +10,9 @@ import user from './module/user'
 
 const conf = {
   modules: {
-    user,
-    authentication,
-    registration,
+    user: user,
+    auth: authentication,
+    reg: registration,
   },
   state,
   getters,

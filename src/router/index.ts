@@ -58,7 +58,6 @@ const router = createRouter({
 })
 
 const isAuthenticated = () => {
-  console.log(store.getters.isAuthenticated)
   return store.getters.isAuthenticated
 }
 

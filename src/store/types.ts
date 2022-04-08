@@ -4,17 +4,17 @@ interface IParameters {
 }
 
 interface IUser {
-    email: string
-    password: string
-    firstName: string
-    lastName: string
-    birthday: Date
+    email?: string
+    firstName?: string
+    lastName?: string
+    birthday?: Date
 }
 
 interface IRootStoreState {
-    user: IUser | null
+    user: IUser
+    token: string | null
     parameters: IParameters | null
     isFetchingParameters: boolean
 }
 
-export { IUser, IRootStoreState }
+export { IRootStoreState, IUser, IParameters }

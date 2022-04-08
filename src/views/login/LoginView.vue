@@ -31,7 +31,7 @@
         @input="v$.password.$touch()"
         @blur="v$.password.$touch()"
       ></v-text-field>
-      <span class="float-left">Not yet registered ? <a href="/sign-up">Sign Up here</a></span>
+      <span>Not yet registered ? <a href="/sign-up">Sign Up here</a></span>
       <v-btn
         class="float-right"
         color="success"
@@ -41,6 +41,33 @@
         login
       </v-btn>
     </form>
+
+    <v-alert v-if="signUpStatus === 'success'"
+      type="success"
+      variant="contained-text"
+      closable
+      close-label="Close Alert"
+      class="mt-6"
+      color="green"
+      title="Registration Success !"
+    >
+      <template v-slot:title>
+        Registration Success !
+      </template>
+      Please check your email, and confirm the link send by Wiz-us Team before login.
+    </v-alert>
+    <v-alert v-else-if="signUpStatus === 'error'"
+      type="error"
+      variant="contained-text"
+      closable
+      close-label="Close Alert"
+      class="mt-6"
+      color="red"
+      title="Registration Error !"
+    >
+      An Error occured during registration, please try again.
+    </v-alert>
+
   </v-card>
 </template>
 
@@ -50,6 +77,7 @@ import { required, email } from '@vuelidate/validators'
 import { store } from '../../store'
 import router from '../../router'
 import { isItemsExist } from '../../services/utils.service'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
   setup () {
@@ -63,22 +91,25 @@ export default {
       valid:true
     }
   },
-    
+
   validations() {
     return {
       email: {
-          required, 
-          email, 
+          required,
+          email,
           $lazy: true
       },
       password: {
-          required, 
+          required,
           $lazy: true
       },
     }
   },
 
   computed: {
+    ...mapGetters({
+      signUpStatus: 'getSignUpStatus',
+    }),
     emailErrors () {
       const errors = []
       if (!this.v$.email.$dirty) return errors
@@ -92,8 +123,8 @@ export default {
       this.v$.password.required.$invalid && errors.push('Password is required.')
       return errors
     },
-  },  
-  methods: {  
+  },
+  methods: {
     async disableButton () {
       const isAllRequiredItemsExist = isItemsExist([this.email,this.password])
       const isFormCorrect = this.v$.$errors.length === 0 && isAllRequiredItemsExist
@@ -110,10 +141,9 @@ export default {
         store.dispatch('loginUser', { email, password }).then(() => {
           router.push('/')
         })
-      } 
+      }
     },
   },
-  
 }
 </script>
 

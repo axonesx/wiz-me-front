@@ -1,4 +1,4 @@
-import { USER_LOGOUT, USER_REQUEST } from './mutation-types'
+import { USER_REQUEST } from './mutation-types'
 import { USER_SUCCESS } from './mutation-types'
 import { USER_ERROR } from './mutation-types'
 import { IAction } from '@/store/types/action'
@@ -14,7 +14,7 @@ const requestUser: IAction<IState, number> = ({ commit, dispatch }, id) => {
       commit(USER_SUCCESS, resp)
     })
     .catch(() => {
-      commit(USER_ERROR) 
+      commit(USER_ERROR)
       dispatch('loginUser')
     })
 }

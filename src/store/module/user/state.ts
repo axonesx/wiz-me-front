@@ -1,8 +1,7 @@
 import { IState } from "./types"
 
-const state: IState = { 
-    status: '', 
-    userProfile: {}
+const state: IState = {
+    userRequestStatus: '',
 }
 
 export default {

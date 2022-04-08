@@ -1,5 +1,5 @@
 interface IState {
-    status: string,
+    signUpStatus: string,
 }
 
 export { IState }

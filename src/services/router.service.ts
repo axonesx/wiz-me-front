@@ -1,5 +1,5 @@
-import { getApi } from "@/api";
-import { store } from "@/store";
+import { getApi } from "@/api"
+import { store } from "@/store"
 
 async function handleFetchParameters() {
     if (!store.getters.existParameters){
@@ -7,6 +7,6 @@ async function handleFetchParameters() {
     }
 }
 
-export { 
+export {
     handleFetchParameters,
 }

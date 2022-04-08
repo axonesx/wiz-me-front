@@ -1,7 +1,7 @@
 import { IState } from './types'
-  
-  const signUpStatus = (state: IState): string => state.status
+
+const getSignUpStatus = (state: IState): string => state.signUpStatus
 
 export default {
-  signUpStatus,
+  getSignUpStatus,
 }

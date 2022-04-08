@@ -8,6 +8,6 @@ const isItemsExist = function(items: any[]): boolean {
     return isExist
 }
 
-export { 
+export {
     isItemsExist,
 }

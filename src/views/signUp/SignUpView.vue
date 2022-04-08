@@ -58,8 +58,8 @@
         @blur="v$.lastName.$touch()"
       ></v-text-field>
 
-      <Datepicker 
-        class="mb-6" 
+      <Datepicker
+        class="mb-6"
         v-model="date"
         :enableTimePicker="false"
         @blur="disableButton"
@@ -74,7 +74,7 @@
         :disabled="valid"
         @click="signUp"
       >
-        login
+        SIGN UP
       </v-btn>
 
     </v-form>
@@ -89,14 +89,13 @@ import router from '../../router'
 import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import { isItemsExist } from '../../services/utils.service'
-import { ref } from 'vue';
 
 const passwordRegex = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
 const isPassword = (value) => value.match(passwordRegex)
 
 export default {
   components: { Datepicker },
-  setup () {         
+  setup () {
     return {
       v$: useVuelidate(),
     }
@@ -114,12 +113,12 @@ export default {
       valid: true,
     }
   },
-    
+
   validations() {
     return {
       email: {
-          required, 
-          email, 
+          required,
+          email,
           $lazy: true
       },
       password: {
@@ -128,20 +127,20 @@ export default {
           $lazy: true
       },
       confirmPassword: {
-          required, 
+          required,
           sameAsPassword: sameAs(this.password),
           $lazy: true
       },
       firstName: {
-          required, 
+          required,
           $lazy: true
       },
       lastName: {
-          required, 
+          required,
           $lazy: true
       },
       date: {
-          required, 
+          required,
           $lazy: true
       },
     }
@@ -185,11 +184,11 @@ export default {
       this.v$.lastName.required.$invalid && errors.push('Last name is required.')
       return errors
     },
-  },  
-  methods: { 
+  },
+  methods: {
     save (date) {
       this.$refs.menu.save(date)
-    }, 
+    },
     async disableButton () {
       const isAllRequiredItemsExist = isItemsExist([this.email,this.password,this.confirmPassword,this.firstName,this.lastName,this.date])
       const isFormCorrect = this.v$.$errors.length === 0 && isAllRequiredItemsExist
@@ -207,10 +206,9 @@ export default {
         store.dispatch('signupUser', { email, password, firstName, lastName, birthday } ).then(() => {
           router.push('/')
         })
-      } 
+      }
     },
   },
-  
 }
 </script>
 

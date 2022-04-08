@@ -1,4 +1,4 @@
-import Axios, { AxiosResponse } from 'axios';
+import Axios, { AxiosResponse } from 'axios'
 
 const httpClientParameters = Axios.create({
     baseURL: '/',
