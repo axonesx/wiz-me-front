@@ -218,6 +218,6 @@ a {
   text-decoration: none
 }
 .signup-card {
-    width:450px
+    max-width:450px
 }
 </style>

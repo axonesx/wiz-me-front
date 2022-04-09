@@ -152,6 +152,6 @@ a {
   text-decoration: none
 }
 .login-card {
-    width:450px
+    max-width:450px
 }
 </style>
