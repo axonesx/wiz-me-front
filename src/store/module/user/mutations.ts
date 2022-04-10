@@ -2,7 +2,7 @@ import { USER_REQUEST } from './mutation-types'
 import { USER_SUCCESS } from './mutation-types'
 import { USER_ERROR } from './mutation-types'
 import { IState } from './types'
-import { IMutation, IMutationWithoutPayload } from '@/store/types/mutation'
+import { IMutationWithoutPayload } from '@/store/types/mutation'
 
 const userRequest: IMutationWithoutPayload<IState> = (state) => {
   state.userRequestStatus = 'loading'

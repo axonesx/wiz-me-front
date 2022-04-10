@@ -12,8 +12,8 @@
     </v-card-header>
 
     <v-form
-    @change="disableButton"
-    @blur="disableButton"
+      @change="disableButton"
+      @blur="disableButton"
     >
       <v-text-field
         v-model="v$.email.$model"
@@ -67,7 +67,7 @@
         required
       />
 
-      <span class="float-left">Allready registered ? <a href="/login">Log In here</a></span>
+      <span>Allready registered ? <a href="/login">Log In here</a></span>
       <v-btn
         class="float-right"
         color="success"
@@ -78,6 +78,18 @@
       </v-btn>
 
     </v-form>
+
+    <v-alert v-if="signUpStatus === 'error'"
+      type="error"
+      variant="contained-text"
+      closable
+      close-label="Close Alert"
+      class="mt-6"
+      color="red"
+      title="Registration Error !"
+    >
+      An Error occured during registration, please try again.
+    </v-alert>
   </v-card>
 </template>
 
@@ -88,7 +100,8 @@ import { store } from '../../store'
 import router from '../../router'
 import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
-import { isItemsExist } from '../../services/utils.service'
+import { isAllItemsExist } from '../../services/utils.service'
+import { mapGetters } from 'vuex'
 
 const passwordRegex = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
 const isPassword = (value) => value.match(passwordRegex)
@@ -151,6 +164,9 @@ export default {
     },
   },
   computed: {
+    ...mapGetters({
+      signUpStatus: 'getSignUpStatus',
+    }),
     emailErrors () {
       const errors = []
       if (!this.v$.email.$dirty) return errors
@@ -190,7 +206,7 @@ export default {
       this.$refs.menu.save(date)
     },
     async disableButton () {
-      const isAllRequiredItemsExist = isItemsExist([this.email,this.password,this.confirmPassword,this.firstName,this.lastName,this.date])
+      const isAllRequiredItemsExist = isAllItemsExist([this.email,this.password,this.confirmPassword,this.firstName,this.lastName,this.date])
       const isFormCorrect = this.v$.$errors.length === 0 && isAllRequiredItemsExist
       if (isFormCorrect) {
         this.valid=false

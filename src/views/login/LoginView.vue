@@ -12,8 +12,9 @@
     </v-card-header>
 
     <form
-    @change="disableButton"
-    @blur="disableButton">
+      @change="disableButton"
+      @blur="disableButton"
+    >
       <v-text-field
         v-model="v$.email.$model"
         label="Enter your E-mail"
@@ -51,21 +52,29 @@
       color="green"
       title="Registration Success !"
     >
-      <template v-slot:title>
-        Registration Success !
-      </template>
       Please check your email, and confirm the link send by Wiz-us Team before login.
     </v-alert>
-    <v-alert v-else-if="signUpStatus === 'error'"
+    <v-alert v-if="logoutStatus === 'success'"
+      type="success"
+      variant="contained-text"
+      closable
+      close-label="Close Alert"
+      class="mt-6"
+      color="green"
+      title="Logout Success !"
+    >
+      You log out with success
+    </v-alert>
+    <v-alert v-if="authStatus === 'error'"
       type="error"
       variant="contained-text"
       closable
       close-label="Close Alert"
       class="mt-6"
       color="red"
-      title="Registration Error !"
+      title="Login Error !"
     >
-      An Error occured during registration, please try again.
+      Your account is not activated.
     </v-alert>
 
   </v-card>
@@ -76,8 +85,8 @@ import useVuelidate from '@vuelidate/core'
 import { required, email } from '@vuelidate/validators'
 import { store } from '../../store'
 import router from '../../router'
-import { isItemsExist } from '../../services/utils.service'
-import { mapGetters, mapState } from 'vuex'
+import { isAllItemsExist } from '../../services/utils.service'
+import { mapGetters } from 'vuex'
 
 export default {
   setup () {
@@ -109,6 +118,8 @@ export default {
   computed: {
     ...mapGetters({
       signUpStatus: 'getSignUpStatus',
+      authStatus: 'getAuthStatus',
+      logoutStatus: 'getLogoutStatus',
     }),
     emailErrors () {
       const errors = []
@@ -126,7 +137,7 @@ export default {
   },
   methods: {
     async disableButton () {
-      const isAllRequiredItemsExist = isItemsExist([this.email,this.password])
+      const isAllRequiredItemsExist = isAllItemsExist([this.email,this.password])
       const isFormCorrect = this.v$.$errors.length === 0 && isAllRequiredItemsExist
       if (isFormCorrect) {
         this.valid=false
