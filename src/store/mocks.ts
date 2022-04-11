@@ -25,4 +25,4 @@ const mocks = {
     }
 }
 
-export { initialState, mocks }
+export { initialState, IUser, mocks }
