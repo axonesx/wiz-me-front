@@ -2,11 +2,25 @@
   <v-card
     class="signup-card pa-6 mt-12 mx-auto">
 
+
+    <v-alert v-if="signUpStatus === 'error'"
+      type="error"
+      variant="contained-text"
+      closable
+      close-label="Close Alert"
+      color="red"
+    >
+      <template v-slot:title>
+        {{ $t('signUpPage.registration.error.title') }}
+      </template>
+        {{ $t('signUpPage.registration.error.text') }}
+      
+    </v-alert>
     <v-card-header>
       <v-card-header-text>
-        <v-card-title>Sign Up</v-card-title>
+        <v-card-title>{{ $t('signUpPage.registration.title') }}</v-card-title>
         <v-card-subtitle>
-          <span class="mr-1">Please register yourself</span>
+          <span class="mr-1">{{ $t('signUpPage.registration.subtitle') }}</span>
         </v-card-subtitle>
       </v-card-header-text>
     </v-card-header>
@@ -17,12 +31,14 @@
     >
       <v-text-field
         v-model="v$.email.$model"
-        label="Enter your E-mail"
         :error-messages="emailErrors"
         required
         @input="v$.email.$touch()"
         @blur="v$.email.$touch()"
-      ></v-text-field>
+      >
+      <template v-slot:label>
+        {{ $t('signUpPage.registration.form.email') }}
+      </template></v-text-field>
       <v-text-field
         v-model="v$.password.$model"
         label="Enter your Password"
@@ -31,7 +47,10 @@
         required
         @input="v$.password.$touch()"
         @blur="v$.password.$touch()"
-      ></v-text-field>
+      >
+      <template v-slot:label>
+        {{ $t('signUpPage.registration.form.password') }}
+      </template></v-text-field>
       <v-text-field
         v-model="v$.confirmPassword.$model"
         label="Confirme your Password"
@@ -40,7 +59,10 @@
         required
         @input="v$.confirmPassword.$touch()"
         @blur="v$.confirmPassword.$touch()"
-      ></v-text-field>
+      >
+      <template v-slot:label>
+        {{ $t('signUpPage.registration.form.confirmPassword') }}
+      </template></v-text-field>
       <v-text-field
         v-model="v$.firstName.$model"
         label="Enter your first Name"
@@ -48,7 +70,10 @@
         required
         @input="v$.firstName.$touch()"
         @blur="v$.firstName.$touch()"
-      ></v-text-field>
+      >
+      <template v-slot:label>
+        {{ $t('signUpPage.registration.form.firstName') }}
+      </template></v-text-field>
       <v-text-field
         v-model="v$.lastName.$model"
         label="Enter your last Name"
@@ -56,8 +81,13 @@
         required
         @input="v$.lastName.$touch()"
         @blur="v$.lastName.$touch()"
-      ></v-text-field>
-
+      >
+      <template v-slot:label>
+        {{ $t('signUpPage.registration.form.lastName') }}
+      </template></v-text-field>
+      <v-card-subtitle>
+        <span class="mr-1">{{ $t('signUpPage.registration.form.birthday') }}</span>
+      </v-card-subtitle>
       <Datepicker
         class="mb-6"
         v-model="date"
@@ -66,30 +96,17 @@
         @cleared="disableButton"
         required
       />
-
-      <span>Allready registered ? <a href="/login">Log In here</a></span>
       <v-btn
-        class="float-right"
+        class="mb-6"
         color="success"
         :disabled="valid"
         @click="signUp"
       >
-        SIGN UP
+      {{ $t('signUpPage.registration.button') }}
       </v-btn>
-
+      <v-divider></v-divider>
+      <span>{{ $t('signUpPage.registration.login.span') }}<a href="/login">{{ $t('signUpPage.registration.login.link') }}</a></span>
     </v-form>
-
-    <v-alert v-if="signUpStatus === 'error'"
-      type="error"
-      variant="contained-text"
-      closable
-      close-label="Close Alert"
-      class="mt-6"
-      color="red"
-      title="Registration Error !"
-    >
-      An Error occured during registration, please try again.
-    </v-alert>
   </v-card>
 </template>
 
@@ -102,6 +119,7 @@ import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import { isAllItemsExist } from '../../services/utils.service'
 import { mapGetters } from 'vuex'
+import { useI18n } from 'vue-i18n'
 
 const passwordRegex = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
 const isPassword = (value) => value.match(passwordRegex)
@@ -109,7 +127,9 @@ const isPassword = (value) => value.match(passwordRegex)
 export default {
   components: { Datepicker },
   setup () {
+    const { t } = useI18n()
     return {
+      t,
       v$: useVuelidate(),
     }
   },
