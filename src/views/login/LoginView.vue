@@ -45,7 +45,9 @@
       {{ $t('loginPage.login.button') }}
       </v-btn>
       <v-divider></v-divider>
-      <span class="mt-6">{{ $t('loginPage.login.registration.span') }}<a href="/sign-up">{{ $t('loginPage.login.registration.link') }}</a></span>
+      <span class="mt-6">{{ $t('loginPage.login.registration.span') }}
+        <a href="/sign-up">{{ $t('loginPage.login.registration.link') }}</a>
+      </span>
     </form>
 
     <v-alert v-if="signUpStatus === 'success'"
@@ -59,7 +61,7 @@
       <template v-slot:title>
         {{ $t('loginPage.login.registration.success.title') }}
       </template>
-        {{ $t('loginPage.login.registration.success.text') }}
+        {{ $t(signUpMessage) }}
     </v-alert>
     <v-alert v-if="logoutStatus === 'success'"
       type="success"
@@ -104,7 +106,7 @@ export default {
     const { t } = useI18n()
     return {
       t,
-      v$: useVuelidate() 
+      v$: useVuelidate()
     }
   },
 
@@ -133,6 +135,7 @@ export default {
   computed: {
     ...mapGetters({
       signUpStatus: 'getSignUpStatus',
+      signUpMessage: 'getSignUpMessage',
       authStatus: 'getAuthStatus',
       logoutStatus: 'getLogoutStatus',
     }),

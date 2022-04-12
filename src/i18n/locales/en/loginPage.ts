@@ -16,7 +16,8 @@ export default {
             link: `Sign up here`,
             success: {
                 title: `Sign Up success !`,
-                text: `You registrated yourself with success, please check your emails to confirm your account.`
+                textAlreadyRegistrated: `You registrated yourself with success, please check your emails to confirm your account.`,
+                textNotYetRegistrated: `Your account allready exist, please check your emails to confirm your account.`
             },
         }
     },

@@ -16,7 +16,8 @@ export default {
             link: `Enregistrez vous ici`,
             success: {
                 title: `Enregistrement réussi !`,
-                text: `Vous vous êtes correctement enregistré, veuillez confirmer votre mail, vérifier votre boîte de réception.`
+                textAlreadyRegistrated: `Vous vous etiez déjà enregistré, veuillez confirmer votre mail en vérifiant votre boîte de réception.`,
+                textNotYetRegistrated: `Vous vous êtes correctement enregistré, veuillez confirmer votre mail en vérifiant votre boîte de réception.`
             },
         }
     },

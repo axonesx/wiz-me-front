@@ -15,7 +15,7 @@ const authSuccess: IMutationWithoutPayload<IState> = (state) => {
   state.authStatus = 'success'
 }
 
-const authErro: IMutationWithoutPayload<IState> = (state) => {
+const authError: IMutationWithoutPayload<IState> = (state) => {
   state.authStatus = 'error'
 }
 
@@ -35,7 +35,7 @@ const logoutError: IMutationWithoutPayload<IState> = (state) => {
 export default {
   [AUTH_REQUEST]: authRequest,
   [AUTH_SUCCESS]: authSuccess,
-  [AUTH_ERROR]: authErro,
+  [AUTH_ERROR]: authError,
   [LOGOUT_REQUEST]: logoutRequest,
   [LOGOUT_SUCCESS]: logoutSuccess,
   [LOGOUT_ERROR]: logoutError,

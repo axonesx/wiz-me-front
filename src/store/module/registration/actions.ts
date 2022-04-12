@@ -10,7 +10,8 @@ const signupUser: IAction<IState, string> = ({ commit }, user) => {
     httpClientApi
     .post('/signup', user)
       .then(resp => {
-        commit(SIGN_UP_SUCCESS)
+        const message = resp.data.isNewUser ? 'loginPage.login.registration.success.textNotYetRegistrated': 'loginPage.login.registration.success.textAlreadyRegistrated'
+        commit(SIGN_UP_SUCCESS, message)
         resolve(resp)
       })
     .catch(err => {
