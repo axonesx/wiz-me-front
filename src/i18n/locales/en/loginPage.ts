@@ -10,11 +10,14 @@ export default {
         error: {
             title: `Login Error !`,
             text: `Your account is not activated.`
-            
         },
         registration:{
             span: `Not yet registered ? `,
-            link: `Sign up here`
+            link: `Sign up here`,
+            success: {
+                title: `Sign Up success !`,
+                text: `You registrated yourself with success, please check your emails to confirm your account.`
+            },
         }
     },
     logout: {

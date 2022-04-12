@@ -13,7 +13,11 @@ export default {
         },
         registration:{
             span: `Pas encore enregistré ? `,
-            link: `Enregistrez vous ici`
+            link: `Enregistrez vous ici`,
+            success: {
+                title: `Enregistrement réussi !`,
+                text: `Vous vous êtes correctement enregistré, veuillez confirmer votre mail, vérifier votre boîte de réception.`
+            },
         }
     },
     logout: {

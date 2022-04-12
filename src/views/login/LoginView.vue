@@ -57,9 +57,9 @@
       color="green"
     >
       <template v-slot:title>
-        {{ $t('loginPage.registration.success.title') }}
+        {{ $t('loginPage.login.registration.success.title') }}
       </template>
-        {{ $t('loginPage.registration.success.text') }}
+        {{ $t('loginPage.login.registration.success.text') }}
     </v-alert>
     <v-alert v-if="logoutStatus === 'success'"
       type="success"
@@ -83,9 +83,9 @@
       color="red"
     >
       <template v-slot:title>
-        {{ $t('loginPage.logout.success.title') }}
+        {{ $t('loginPage.login.error.title') }}
       </template>
-        {{ $t('loginPage.logout.success.text') }}
+        {{ $t('loginPage.login.error.text') }}
     </v-alert>
   </v-card>
 </template>
