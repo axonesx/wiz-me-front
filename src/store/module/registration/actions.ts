@@ -4,7 +4,7 @@ import { IState } from './types'
 import { httpClientApi } from '@/api/helpers/http-client-api'
 
 
-const signupUser: IAction<IState, string> = ({commit, dispatch }, user) => {
+const signupUser: IAction<IState, string> = ({ commit }, user) => {
   return new Promise((resolve, reject) => {
     commit(SIGN_UP_REQUEST)
     httpClientApi

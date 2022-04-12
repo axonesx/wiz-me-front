@@ -4,42 +4,48 @@
 
     <v-card-header>
       <v-card-header-text>
-        <v-card-title>Log In</v-card-title>
+        <v-card-title>{{ $t('loginPage.login.title') }}</v-card-title>
         <v-card-subtitle>
-          <span class="mr-1">Please identify yourself</span>
+          <span class="mr-1">{{ $t('loginPage.login.subtitle') }}</span>
         </v-card-subtitle>
       </v-card-header-text>
     </v-card-header>
 
     <form
-    @change="disableButton"
-    @blur="disableButton">
+      @change="disableButton"
+      @blur="disableButton"
+    >
       <v-text-field
         v-model="v$.email.$model"
-        label="Enter your E-mail"
         :error-messages="emailErrors"
         required
         @input="v$.email.$touch()"
         @blur="v$.email.$touch()"
-      ></v-text-field>
+      >
+      <template v-slot:label>
+        {{ $t('loginPage.login.form.email') }}
+      </template></v-text-field>
       <v-text-field
         v-model="v$.password.$model"
-        label="Enter your Password"
         :error-messages="passwordErrors"
         type="password"
         required
         @input="v$.password.$touch()"
         @blur="v$.password.$touch()"
-      ></v-text-field>
-      <span>Not yet registered ? <a href="/sign-up">Sign Up here</a></span>
+      >
+      <template v-slot:label>
+        {{ $t('loginPage.login.form.password') }}
+      </template></v-text-field>
       <v-btn
-        class="float-right"
+        class="mb-6"
         color="success"
         :disabled="valid"
         @click="login"
       >
-        login
+      {{ $t('loginPage.login.button') }}
       </v-btn>
+      <v-divider></v-divider>
+      <span class="mt-6">{{ $t('loginPage.login.registration.span') }}<a href="/sign-up">{{ $t('loginPage.login.registration.link') }}</a></span>
     </form>
 
     <v-alert v-if="signUpStatus === 'success'"
@@ -49,25 +55,38 @@
       close-label="Close Alert"
       class="mt-6"
       color="green"
-      title="Registration Success !"
     >
       <template v-slot:title>
-        Registration Success !
+        {{ $t('loginPage.registration.success.title') }}
       </template>
-      Please check your email, and confirm the link send by Wiz-us Team before login.
+        {{ $t('loginPage.registration.success.text') }}
     </v-alert>
-    <v-alert v-else-if="signUpStatus === 'error'"
+    <v-alert v-if="logoutStatus === 'success'"
+      type="success"
+      variant="contained-text"
+      closable
+      close-label="Close Alert"
+      class="mt-6"
+      color="green"
+    >
+      <template v-slot:title>
+        {{ $t('loginPage.logout.success.title') }}
+      </template>
+        {{ $t('loginPage.logout.success.text') }}
+    </v-alert>
+    <v-alert v-if="authStatus === 'error'"
       type="error"
       variant="contained-text"
       closable
       close-label="Close Alert"
       class="mt-6"
       color="red"
-      title="Registration Error !"
     >
-      An Error occured during registration, please try again.
+      <template v-slot:title>
+        {{ $t('loginPage.logout.success.title') }}
+      </template>
+        {{ $t('loginPage.logout.success.text') }}
     </v-alert>
-
   </v-card>
 </template>
 
@@ -76,12 +95,17 @@ import useVuelidate from '@vuelidate/core'
 import { required, email } from '@vuelidate/validators'
 import { store } from '../../store'
 import router from '../../router'
-import { isItemsExist } from '../../services/utils.service'
-import { mapGetters, mapState } from 'vuex'
+import { isAllItemsExist } from '../../services/utils.service'
+import { mapGetters } from 'vuex'
+import { useI18n } from 'vue-i18n'
 
 export default {
   setup () {
-    return { v$: useVuelidate() }
+    const { t } = useI18n()
+    return {
+      t,
+      v$: useVuelidate() 
+    }
   },
 
   data() {
@@ -109,6 +133,8 @@ export default {
   computed: {
     ...mapGetters({
       signUpStatus: 'getSignUpStatus',
+      authStatus: 'getAuthStatus',
+      logoutStatus: 'getLogoutStatus',
     }),
     emailErrors () {
       const errors = []
@@ -126,7 +152,7 @@ export default {
   },
   methods: {
     async disableButton () {
-      const isAllRequiredItemsExist = isItemsExist([this.email,this.password])
+      const isAllRequiredItemsExist = isAllItemsExist([this.email,this.password])
       const isFormCorrect = this.v$.$errors.length === 0 && isAllRequiredItemsExist
       if (isFormCorrect) {
         this.valid=false

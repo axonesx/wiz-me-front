@@ -1,4 +1,4 @@
-import { IMutation, IMutationWithoutPayload } from '@/store/types/mutation'
+import { IMutationWithoutPayload } from '@/store/types/mutation'
 import { AUTH_REQUEST } from './mutation-types'
 import { AUTH_SUCCESS } from './mutation-types'
 import { AUTH_ERROR } from './mutation-types'
@@ -11,7 +11,7 @@ const authRequest: IMutationWithoutPayload<IState> = (state) => {
   state.authStatus = 'loading'
 }
 
-const authSuccess: IMutation<IState, string> = (state, token) => {
+const authSuccess: IMutationWithoutPayload<IState> = (state) => {
   state.authStatus = 'success'
 }
 

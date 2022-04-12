@@ -1,4 +1,4 @@
-import { IMutation, IMutationWithoutPayload } from '@/store/types/mutation'
+import { IMutationWithoutPayload } from '@/store/types/mutation'
 import { SIGN_UP_REQUEST } from './mutation-types'
 import { SIGN_UP_SUCCESS } from './mutation-types'
 import { SIGN_UP_ERROR } from './mutation-types'
@@ -8,7 +8,7 @@ const signUpRequest: IMutationWithoutPayload<IState> = (state) => {
   state.signUpStatus = 'loading'
 }
 
-const signUpSuccess: IMutation<IState, string> = (state, token) => {
+const signUpSuccess: IMutationWithoutPayload<IState> = (state) => {
   state.signUpStatus = 'success'
 }
 
