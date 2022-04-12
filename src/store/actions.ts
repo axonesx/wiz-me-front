@@ -14,7 +14,8 @@ const loginUser: IAction<IRootStoreState, string> = ({ commit }, user) => {
     .post('/login', user)
       .then(resp => {
         const xsrfToken = resp.data.xsrfToken
-        setTokenInLocalStorage(xsrfToken)
+        const maxAge = resp.data.maxAge
+        setTokenInLocalStorage(xsrfToken, maxAge)
         commit(AUTH_SUCCESS)
         commit(USER_LOGIN, resp.data.findUser)
         commit(TOKEN_LOGIN, resp.data.xsrfToken)
