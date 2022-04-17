@@ -1,4 +1,3 @@
-import dayjs from 'dayjs'
 import { createI18n } from 'vue-i18n'
 import en from './locales/en/en'
 import fr from './locales/fr/fr'

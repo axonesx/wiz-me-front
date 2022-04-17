@@ -14,7 +14,6 @@ import { IState, IUser } from "./types";
     }
 
     const getBirthday = (state: IState): string | null => {
-        const now = new Date
         if(state.user) return formatDate(state.user?.birthday)
         return null
     }

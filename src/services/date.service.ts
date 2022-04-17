@@ -1,5 +1,10 @@
 import { IDuration } from '@/types/date'
 import dayjs from 'dayjs'
+import fr from 'dayjs/locale/fr'
+import en from 'dayjs/locale/en'
+
+dayjs.locale(en)
+dayjs.locale(fr)
 
 const isBefore = (date1: Date, date2: Date): boolean => {
     return dayjs(date1).isBefore(dayjs(date2))
