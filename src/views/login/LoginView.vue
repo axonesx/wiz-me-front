@@ -63,7 +63,7 @@
       </template>
         {{ $t(signUpMessage) }}
     </v-alert>
-    <v-alert v-if="logoutStatus === 'success'"
+    <!-- <v-alert v-if="logoutStatus === 'success'"
       type="success"
       variant="contained-text"
       closable
@@ -74,8 +74,8 @@
       <template v-slot:title>
         {{ $t('loginPage.logout.success.title') }}
       </template>
-        {{ $t('loginPage.logout.success.text') }}
-    </v-alert>
+        {{ $t('loginPage.logout.success.text') }}}
+    </v-alert> -->
     <v-alert v-if="authStatus === 'error'"
       type="error"
       variant="contained-text"
@@ -99,13 +99,10 @@ import { store } from '../../store'
 import router from '../../router'
 import { isAllItemsExist } from '../../services/utils.service'
 import { mapGetters } from 'vuex'
-import { useI18n } from 'vue-i18n'
 
 export default {
   setup () {
-    const { t } = useI18n()
     return {
-      t,
       v$: useVuelidate()
     }
   },

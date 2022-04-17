@@ -7,6 +7,8 @@ const initialState: IState = {
     userRequestStatus: '',
 }
 
-export default {
-    initialState
+const mocks = {
+    state: initialState,
 }
+
+export { initialState, mocks }

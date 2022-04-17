@@ -3,12 +3,17 @@ enum LocalStorageKeys {
     TOKEN_EXPIRE_IN = 'user-token-expire-in'
 }
 
-const getTokenFromLocalStorage = (): string | null => {
+const isActiveToken = (): boolean => {
     const expiresIn = localStorage.getItem(LocalStorageKeys.TOKEN_EXPIRE_IN)
-    if (expiresIn === null || typeof expiresIn === 'undefined' || expiresIn === undefined) return null
+    if (expiresIn === null || typeof expiresIn === 'undefined' || expiresIn === undefined) return false
     const expiresInDate = new Date(parseInt(expiresIn,10))
     const now = new Date()
-    if(expiresInDate < now) {
+    if(expiresInDate < now) return false
+    return true
+}
+
+const getTokenFromLocalStorage = (): string | null => {
+    if(!isActiveToken()) {
         removeTokenInLocalStorage()
         return null
     }
@@ -29,6 +34,7 @@ const removeTokenInLocalStorage = ():void => {
 
 export {
     LocalStorageKeys,
+    isActiveToken,
     getTokenFromLocalStorage,
     setTokenInLocalStorage,
     removeTokenInLocalStorage,

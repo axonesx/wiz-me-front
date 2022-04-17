@@ -2,7 +2,7 @@ import { ApiError } from '@/helper/api-error'
 import { RequestError } from '@/helper/request-error'
 import { store } from '@/store'
 import { LOGOUT_SUCCESS } from '@/store/module/authentication/mutation-types'
-import { USER_LOGOUT } from '@/store/mutation-types'
+import { USER_LOGOUT } from '@/store/module/user/mutation-types'
 import { AxiosError } from 'axios'
 
 export function manageApiError(error: AxiosError): Promise<RequestError | ApiError> {

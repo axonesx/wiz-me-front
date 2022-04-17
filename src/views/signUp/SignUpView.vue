@@ -119,7 +119,6 @@ import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import { isAllItemsExist } from '../../services/utils.service'
 import { mapGetters } from 'vuex'
-import { useI18n } from 'vue-i18n'
 
 const passwordRegex = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
 const isPassword = (value) => value.match(passwordRegex)
@@ -127,9 +126,7 @@ const isPassword = (value) => value.match(passwordRegex)
 export default {
   components: { Datepicker },
   setup () {
-    const { t } = useI18n()
     return {
-      t,
       v$: useVuelidate(),
     }
   },
