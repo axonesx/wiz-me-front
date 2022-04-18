@@ -17,12 +17,8 @@
         <v-card-subtitle>Wizzer depuis : {{ durationBeingUser.duration }} {{ durationBeingUser.type === 0 ? durationBeingUser.duration > 1 ? $t('app.days') : $t('app.day') : durationBeingUser.type === 1 ? durationBeingUser.duration > 1 ? $t('app.monthes') : $t('app.month') : durationBeingUser.duration > 1 ? $t('app.years') : $t('app.year')}}</v-card-subtitle>
       </v-col>
       <v-col cols="3" class="d-flex align-center justify-end">
-        <v-btn variant="text" class="ma-4">
-          <v-icon size="large" class="mr-1" color="blue">
-            mdi-cog-outline
-          </v-icon>
-          Modifier
-        </v-btn>
+        <UserInformationUpdateForm>
+        </UserInformationUpdateForm>
       </v-col>
     </v-row>
     <v-divider class="mx-4 mb-1"></v-divider>
@@ -50,9 +46,13 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { mapGetters } from 'vuex'
+import UserInformationUpdateForm from './UserInformationUpdateForm.vue'
 
 export default defineComponent({
   name: 'UserInformationCard',
+    components:{
+        UserInformationUpdateForm
+    },
 
   computed: {
     ...mapGetters({
