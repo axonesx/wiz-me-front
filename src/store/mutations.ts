@@ -1,6 +1,5 @@
 import { Util } from '@/api/types'
-import { FETCH_PARAMETERS } from './mutation-types'
-import { FETCH_PARAMETERS_SUCCESS } from './mutation-types'
+import { FETCH_PARAMETERS, FETCH_PARAMETERS_SUCCESS, SET_GLOBAL_ERROR } from './mutation-types'
 import { IRootStoreState } from './types'
 import { IMutation, IMutationWithoutPayload } from './types/mutation'
 
@@ -14,8 +13,12 @@ const fetchSuccessParameters: IMutation<IRootStoreState, Util.IParameters>  = (s
     state.isFetchingParameters = false
 }
 
+const setGlobalError: IMutation<IRootStoreState, string | undefined> = (state, error) => {
+    state.globalError = error
+}
 
 export default {
     [FETCH_PARAMETERS]: fetchParameters,
     [FETCH_PARAMETERS_SUCCESS]: fetchSuccessParameters,
+    [SET_GLOBAL_ERROR]: setGlobalError,
 }

@@ -23,7 +23,7 @@
         @blur="v$.email.$touch()"
       >
       <template v-slot:label>
-        {{ $t('loginPage.login.form.email') }}
+        {{ $t('loginPage.login.form.email.label') }}
       </template></v-text-field>
       <v-text-field
         v-model="v$.password.$model"
@@ -34,7 +34,7 @@
         @blur="v$.password.$touch()"
       >
       <template v-slot:label>
-        {{ $t('loginPage.login.form.password') }}
+        {{ $t('loginPage.login.form.password.label') }}
       </template></v-text-field>
       <v-btn
         class="mb-6"
@@ -139,14 +139,14 @@ export default {
     emailErrors () {
       const errors = []
       if (!this.v$.email.$dirty) return errors
-      this.v$.email.required.$invalid && errors.push('Email is required.')
-      this.v$.email.email.$invalid && errors.push('Must be an email')
-      return errors
+      this.v$.email.required.$invalid && errors.push(this.$t('loginPage.login.form.email.required'))
+      this.v$.email.email.$invalid && errors.push(this.$t('loginPage.login.form.email.isEmail'))
+     return errors
     },
     passwordErrors () {
       const errors = []
       if (!this.v$.password.$dirty) return errors
-      this.v$.password.required.$invalid && errors.push('Password is required.')
+      this.v$.password.required.$invalid && errors.push(this.$t('loginPage.login.form.password.required'))
       return errors
     },
   },

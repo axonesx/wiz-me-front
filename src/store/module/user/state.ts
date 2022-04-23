@@ -1,12 +1,11 @@
 import { getTokenFromLocalStorage } from "@/services/local-storage.service"
+import { initialState } from "./mocks"
 import { IState } from "./types"
 
-const initialState: IState = {
-    user: null,
-    token: getTokenFromLocalStorage(),
-    userRequestStatus: '',
+const state: IState = {
+    ...initialState
 }
 
 export default {
-    initialState
+    state
 }

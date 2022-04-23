@@ -4,6 +4,8 @@ enum LocalStorageKeys {
 }
 
 const isActiveToken = (): boolean => {
+    const token = localStorage.getItem(LocalStorageKeys.TOKEN)
+    if (token === null || typeof token === 'undefined' || token === undefined) return false
     const expiresIn = localStorage.getItem(LocalStorageKeys.TOKEN_EXPIRE_IN)
     if (expiresIn === null || typeof expiresIn === 'undefined' || expiresIn === undefined) return false
     const expiresInDate = new Date(parseInt(expiresIn,10))

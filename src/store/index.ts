@@ -1,5 +1,3 @@
-
-import Vuex from 'vuex'
 import { state } from './state'
 import getters from './getters'
 import actions from './actions'
@@ -9,6 +7,9 @@ import authentication from './module/authentication'
 import user from './module/user'
 import createPersistedState from "vuex-persistedstate"
 import SecureLS from "secure-ls"
+import { isActiveToken } from '@/services/local-storage.service'
+import { createStore } from "vuex";
+import { initialState } from './module/user/mocks'
 
 const ls = new SecureLS({ isCompression: false })
 
@@ -24,6 +25,7 @@ const conf = {
   actions,
   plugins: [
     createPersistedState({
+      key: 'user-state',
       paths: ['user'],
       storage: {
         getItem: (key) => ls.get(key),
@@ -34,6 +36,6 @@ const conf = {
   ],
 }
 
-const store = new Vuex.Store(conf)
+const store = createStore(conf)
 
 export { store }

@@ -56,12 +56,14 @@
       </v-navigation-drawer>
     </div>
 
-      <v-main
-      class="px-6">
-        <router-view
-        class="router-view mx-auto"
-        />
-      </v-main>
+    <v-main
+    class="px-6">
+      <router-view
+      class="router-view mx-auto"
+      />
+    </v-main>
+
+    <global-error />
   </v-app>
 </template>
 
@@ -71,9 +73,15 @@ import { mapGetters } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { logout } from './services/router.service'
 import router from './router'
+import GlobalError from './components/GlobalError.vue'
 
 export default defineComponent({
   name: 'App',
+
+  components: {
+    'global-error': GlobalError,
+  },
+
   setup () {
     const { t } = useI18n()
     return {

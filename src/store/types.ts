@@ -6,6 +6,7 @@ interface IParameters {
 interface IRootStoreState {
     parameters: IParameters | null
     isFetchingParameters: boolean
+    globalError: string | undefined
 }
 
 export { IRootStoreState, IParameters }

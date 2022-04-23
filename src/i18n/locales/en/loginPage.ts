@@ -4,8 +4,15 @@ export default {
         subtitle: `Please identify yourself`,
         button: `LOGIN`,
         form: {
-            email:`Enter your Email`,
-            password:`Enter your Password`
+            email: {
+                label: `Enter your email`,
+                required: `Email is required.`,
+                isEmail: `Must be an email.`,
+            },
+            password: {
+                label: `Enter your Password`,
+                required: `Password is required.`,
+            },
         },
         error: {
             title: `Login Error !`,

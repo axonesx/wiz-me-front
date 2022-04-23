@@ -4,8 +4,15 @@ export default {
         subtitle: `Remplissez les informations ci-dessous`,
         button: `S'IDENTIFIER`,
         form: {
-            email:`Entrez votre Email`,
-            password:`Entrez votre mot de passe`
+            email: {
+                label: `Entrez votre email`,
+                required: `Votre email est requis.`,
+                isEmail: `Doit être un email.`,
+            },
+            password: {
+                label: `Entrez votre mot de passe`,
+                required: `Votre mot de passe est requis.`,
+            },
         },
         error: {
             title: `Erreur d'identification !`,

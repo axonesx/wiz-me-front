@@ -8,17 +8,15 @@ async function handleFetchParameters() {
     }
 }
 
-async function authActive() {
-    store.dispatch('authActive')
-}
-
 async function logout() {
-    if(isActiveToken()) store.dispatch('logoutUser')
-    if(!isActiveToken()) store.dispatch('logoutUserFromFront')
+    if(isActiveToken()) {
+        store.dispatch('logoutUser')
+    } else {
+        store.dispatch('logoutUserFromFront')
+    }
 }
 
 export {
     handleFetchParameters,
-    authActive,
     logout,
 }

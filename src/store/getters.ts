@@ -7,7 +7,14 @@ const parameters =
 
 const existParameters = (state: IRootStoreState) => !!state.parameters
 
+const getGlobalError = (state: IRootStoreState) => state.globalError
+
+const existGlobalError = (state: IRootStoreState) => !!state.globalError
+
+
 export default {
     parameters,
     existParameters,
+    getGlobalError,
+    existGlobalError,
 }

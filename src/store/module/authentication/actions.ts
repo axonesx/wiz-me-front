@@ -1,7 +1,7 @@
 import { AUTH_REQUEST, AUTH_SUCCESS, AUTH_ERROR, LOGOUT_REQUEST, LOGOUT_SUCCESS, LOGOUT_ERROR  } from './/mutation-types'
-import { USER_LOGIN, USER_LOGOUT, TOKEN_LOGIN, TOKEN_LOGOUT } from '../../module/user/mutation-types'
-import { removeTokenInLocalStorage, setTokenInLocalStorage } from '@/services/local-storage.service'
-import { IAction } from '@/store/types/action'
+import { USER_LOGIN, USER_LOGOUT, TOKEN_LOGIN } from '../../module/user/mutation-types'
+import { isActiveToken, removeTokenInLocalStorage, setTokenInLocalStorage } from '@/services/local-storage.service'
+import { IAction, IActionWithoutPayload } from '@/store/types/action'
 import { httpClientApi } from '@/api/helpers/http-client-api'
 import { IState } from './types'
 
@@ -27,7 +27,7 @@ const loginUser: IAction<IState, string> = ({ commit }, user) => {
   })
 }
 
-const logoutUser: IAction<IState, string> = ({ commit }) => {
+const logoutUser: IActionWithoutPayload<IState> = ({ commit }) => {
   return new Promise((resolve, reject) => {
     commit(LOGOUT_REQUEST)
     httpClientApi
@@ -35,7 +35,6 @@ const logoutUser: IAction<IState, string> = ({ commit }) => {
         .then(resp => {
           removeTokenInLocalStorage()
           commit(USER_LOGOUT)
-          commit(TOKEN_LOGOUT)
           commit(LOGOUT_SUCCESS)
           resolve(resp)
       })
@@ -46,10 +45,9 @@ const logoutUser: IAction<IState, string> = ({ commit }) => {
   })
 }
 
-const logoutUserFromFront: IAction<IState, string> = ({ commit }) => {
+const logoutUserFromFront: IActionWithoutPayload<IState> = ({ commit }) => {
   removeTokenInLocalStorage()
   commit(USER_LOGOUT)
-  commit(TOKEN_LOGOUT)
   commit(LOGOUT_SUCCESS)
 }
 

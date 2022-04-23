@@ -1,11 +1,12 @@
 import { durationBetweenTwoDates, formatDate } from "@/services/date.service";
 import { IDuration } from "@/types/date";
+import { initialState } from "./mocks";
 import { IState, IUser } from "./types";
 
 
     const isProfileLoaded = (state: IState): boolean => !!state.user?.firstName
 
-    const getProfile = (state: IState): IUser | null => state.user
+    const getProfile = (state: IState): IUser | null => {return state.user}
 
     const getDurationBeingUser = (state: IState): IDuration | null => {
         const now = new Date

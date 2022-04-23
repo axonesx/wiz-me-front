@@ -70,8 +70,8 @@ const isAuthenticated = () => {
 
 router.beforeEach(async (to) => {
   await handleFetchParameters()
-  if(to.name === 'login' || to.name === 'sign-up') logout()
   if(!isAuthenticated() && to.name !== 'login' && to.name !== 'sign-up') return { name: 'login' }
+  if(to.name === 'login' || to.name === 'sign-up') logout()
 })
 
 export default router

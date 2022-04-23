@@ -1,9 +1,8 @@
-import { USER_REQUEST } from './mutation-types'
-import { USER_SUCCESS } from './mutation-types'
-import { USER_ERROR } from './mutation-types'
+import { USER_REQUEST, USER_SUCCESS, USER_ERROR, USER_UPDATE_ERROR, USER_UPDATE_REQUEST, USER_UPDATE_SUCCESS } from './mutation-types'
 import { IAction } from '@/store/types/action'
-import { IState } from './types'
+import { IState, IUser, IUserToUpdate } from './types'
 import { httpClientApi } from '@/api/helpers/http-client-api'
+import { store } from '@/store'
 
 
 const requestUser: IAction<IState, number> = ({ commit, dispatch }, id) => {
@@ -19,6 +18,20 @@ const requestUser: IAction<IState, number> = ({ commit, dispatch }, id) => {
     })
 }
 
+const updateUser: IAction<IState, IUserToUpdate> = ({ commit }, userData) => {
+  commit(USER_UPDATE_REQUEST)
+  const id = store.getters.getProfile.id
+  httpClientApi
+  .put(`/users/${id}`, userData)
+    .then(resp => {
+      commit(USER_UPDATE_SUCCESS, resp.data)
+    })
+    .catch(() => {
+      commit(USER_UPDATE_ERROR)
+    })
+}
+
 export default {
   requestUser,
+  updateUser,
 }
