@@ -6,7 +6,7 @@
       persistent
     >
       <template v-slot:activator="{ props }">
-        <EditButton v-bind="props" textBtn="accountPage.updateUser.form.nameTooltip"></EditButton>
+        <EditButton v-bind="props" :textBtn="$t('accountPage.updateUser.form.nameTooltip')"></EditButton>
       </template>
       <v-card width="550">
         <v-card-title>

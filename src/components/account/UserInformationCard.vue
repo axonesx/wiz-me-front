@@ -34,12 +34,26 @@
     </v-row>
     <v-divider class="mx-16 mb-1"></v-divider>
       <v-row class="ma-5">
-        <v-col cols="10" class="pl-10">
+        <v-col cols="3" class="pl-10">
             <span><h4>Anniversaire :</h4>{{ birthday }}</span>
         </v-col>
-        <v-col cols="2" class="d-flex align-center">
-          <UserBirthdayUpdateForm class="edit-btn by-row">
-          </UserBirthdayUpdateForm>
+        <v-col cols="7" class="pl-10">
+            <div
+              :style="{ display: 'none' }"
+              ref="editUserBirthday">
+              <UserBirthdayUpdateForm
+                :birthdayLabel="user.birthday"
+                @displayForm="displayForm"
+              ></UserBirthdayUpdateForm>
+            </div>
+        </v-col>
+        <v-col cols="2" class="d-flex justify-center">
+          <EditButton
+            class="edit-btn by-row"
+            :textBtn="$t('accountPage.updateUser.form.birthdayTooltip')"
+            @click="displayForm"
+          >
+          </EditButton>
         </v-col>
       </v-row>
 
@@ -65,15 +79,17 @@ import UserNameUpdateForm from './UserNameUpdateForm.vue'
 import UserAvatarUpdateForm from './UserAvatarUpdateForm.vue'
 import UserDescriptionUpdateForm from './UserDescriptionUpdateForm.vue'
 import UserBirthdayUpdateForm from './UserBirthdayUpdateForm.vue'
+import EditButton from '../EditButton.vue'
 
 export default defineComponent({
   name: 'UserInformationCard',
-    components:{
-        UserNameUpdateForm,
-        UserAvatarUpdateForm,
-        UserDescriptionUpdateForm,
-        UserBirthdayUpdateForm,
-    },
+  components:{
+      UserNameUpdateForm,
+      UserAvatarUpdateForm,
+      UserDescriptionUpdateForm,
+      EditButton,
+      UserBirthdayUpdateForm,
+  },
 
   computed: {
     ...mapGetters({
@@ -81,6 +97,21 @@ export default defineComponent({
       birthday: 'getBirthday',
       durationBeingUser: 'getDurationBeingUser',
     })
+  },
+  methods: {
+    displayForm() {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      if(this.$refs.editUserBirthday.style.display === "none"){
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        this.$refs.editUserBirthday.style.display = "flex"
+      } else {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        this.$refs.editUserBirthday.style.display = "none"
+      }
+    }
   }
 })
 </script>
@@ -100,4 +131,8 @@ export default defineComponent({
   .v-col:hover > .by-col{
     display: flex;
   }
+
+  /* .editUserBirthday {
+    display: none;
+  } */
 </style>

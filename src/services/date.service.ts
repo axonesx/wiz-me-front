@@ -36,6 +36,11 @@ const formatDate = (date: Date): string => {
     return dayjs(date).format('DD MMMM, YYYY')
 }
 
+const dateFormat = (dateString: string): string => {
+        const parts = dateString.split('/')
+        return new Date(parseInt(parts[2], 10), parseInt(parts[1], 10) - 1,  parseInt(parts[0], 10)).toISOString()
+}
+
 export {
     isBefore,
     isAfter,
@@ -44,4 +49,5 @@ export {
     yearBetweenTwoDates,
     durationBetweenTwoDates,
     formatDate,
+    dateFormat,
 }

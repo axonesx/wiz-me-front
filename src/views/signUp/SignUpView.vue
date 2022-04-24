@@ -83,17 +83,38 @@
       <template v-slot:label>
         {{ $t('signUpPage.registration.form.lastName.label') }}
       </template></v-text-field>
-      <v-card-subtitle>
-        <span class="mr-1">{{ $t('signUpPage.registration.form.birthday.label') }}</span>
-      </v-card-subtitle>
+
       <Datepicker
         class="mb-6"
-        v-model="date"
-        :enableTimePicker="false"
+        v-model="birthday"
         @blur="disableButton"
         @cleared="disableButton"
-        required
-      />
+        :flow="flow"
+        :format="format"
+        :previewFormat="format"
+        monthNameFormat="long"
+        :locale="locale"
+        autoApply
+        :maxDate="now"
+        @update:modelValue="formatDate"
+        :enableTimePicker="false"
+      >
+        <template #trigger>
+            <v-text-field
+              clearable
+              readonly
+              v-model="v$.birthday.$model"
+              :error-messages="birthdayErrors"
+              required
+              @input="v$.birthday.$touch()"
+              @blur="v$.birthday.$touch();disableButton()"
+              @clear="disableButton"
+            >
+          <template v-slot:label>
+            {{ $t('signUpPage.registration.form.birthday.label') }}
+          </template></v-text-field>
+        </template>
+      </Datepicker>
       <v-btn
         class="mb-6"
         color="success"
@@ -109,6 +130,7 @@
 </template>
 
 <script>
+import { ref } from 'vue'
 import useVuelidate from '@vuelidate/core'
 import { required, email, sameAs, maxLength, minLength } from '@vuelidate/validators'
 import { store } from '../../store'
@@ -117,6 +139,7 @@ import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import { isAllItemsExist } from '../../services/utils.service'
 import { mapGetters } from 'vuex'
+import { dateFormat } from '../../services/date.service'
 
 const passwordRegex = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
 const isPassword = (value) => value.match(passwordRegex)
@@ -124,7 +147,22 @@ const isPassword = (value) => value.match(passwordRegex)
 export default {
   components: { Datepicker },
   setup () {
+    const flow = ref(['year', 'month', 'calendar'])
+    function padTo2Digits(num) {
+      return num.toString().padStart(2, '0');
+    }
+    const format = (date) => {
+      return [
+          padTo2Digits(date.getDate()),
+          padTo2Digits(date.getMonth() + 1),
+          date.getFullYear(),
+        ].join('/')
+    }
+    const now = new Date()
     return {
+      flow,
+      format,
+      now,
       v$: useVuelidate(),
     }
   },
@@ -136,9 +174,9 @@ export default {
       confirmPassword: '',
       firstName: '',
       lastName: '',
-      date: '',
-      menu: false,
+      birthday: '',
       valid: true,
+      locale: 'fr',
     }
   },
 
@@ -171,16 +209,11 @@ export default {
           minLength: minLength(2),
           $lazy: true
       },
-      date: {
+      birthday: {
           required,
           $lazy: true
       },
     }
-  },
-  watch: {
-    menu (val) {
-      val && setTimeout(() => (this.activePicker = 'YEAR'))
-    },
   },
   computed: {
     ...mapGetters({
@@ -223,13 +256,19 @@ export default {
       this.v$.lastName.minLength.$invalid && errors.push(this.$t('signUpPage.registration.form.lastName.minLength'))
       return errors
     },
+    birthdayErrors () {
+      const errors = []
+      if (!this.v$.birthday.$dirty) return errors
+      this.v$.birthday.required.$invalid && errors.push(this.$t('signUpPage.registration.form.birthday.required'))
+      return errors
+    },
   },
   methods: {
-    save (date) {
-      this.$refs.menu.save(date)
+    formatDate (date) {
+      this.birthday = this.format(date)
     },
     async disableButton () {
-      const isAllRequiredItemsExist = isAllItemsExist([this.email,this.password,this.confirmPassword,this.firstName,this.lastName,this.date])
+      const isAllRequiredItemsExist = isAllItemsExist([this.email,this.password,this.confirmPassword,this.firstName,this.lastName,this.birthday])
       const isFormCorrect = this.v$.$errors.length === 0 && isAllRequiredItemsExist
       if (isFormCorrect) {
         this.valid=false
@@ -241,7 +280,7 @@ export default {
       const isFormCorrect = await this.v$.$validate()
       if (isFormCorrect) {
         const { email, password, firstName, lastName } = this
-        const birthday = this.date
+        const birthday = dateFormat(this.birthday)
         store.dispatch('signupUser', { email, password, firstName, lastName, birthday } ).then(() => {
           router.push('/')
         })

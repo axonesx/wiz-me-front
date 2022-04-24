@@ -1,5 +1,5 @@
 <template>
-  <v-btn variant="text">
+  <v-btn flat>
     <v-icon size="small" color="blue">
       mdi-pencil
     </v-icon>
@@ -7,7 +7,7 @@
       activator="parent"
       anchor="top"
     >
-      {{ $t(textBtn) }}
+      {{ textBtn }}
     </v-tooltip>
   </v-btn>
 </template>

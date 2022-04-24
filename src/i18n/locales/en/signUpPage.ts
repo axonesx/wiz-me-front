@@ -31,7 +31,10 @@ export default {
                 maxLength: `Last name should be < 200 caracters.`,
                 minLength: `Last name should be > 2 caracters.`,
             },
-            birthday: `Enter your birthday`
+            birthday: {
+                label: `Enter your birthday`,
+                required: `Birthday is required.`,
+            }
         },
         error: {
             title: `Registration Error !`,

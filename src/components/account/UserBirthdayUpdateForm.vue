@@ -1,107 +1,114 @@
 <template>
-   <v-row justify="center">
-    <v-dialog
-      v-model="dialog"
-      transition="dialog-bottom-transition"
-      persistent
-    >
-      <template v-slot:activator="{ props }">
-        <EditButton v-bind="props" textBtn="accountPage.updateUser.form.birthdayTooltip"></EditButton>
-      </template>
-      <v-card width="550">
-        <v-card-title>
-          <span class="text-h5">{{ $t('accountPage.updateUser.form.birthdayTitle') }}</span>
-        </v-card-title>
-        <v-card-text>
-          <v-form
-            @change="disableButton"
-            @blur="disableButton">
-            <v-row>
-              <Datepicker
-                class="mb-6"
-                v-model="birthday"
-                :enableTimePicker="false"
-                @blur="disableButton"
-                @cleared="disableButton"
+  <v-row>
+    <v-col cols=8>
+      <v-form
+        @change="disableButton"
+        @blur="disableButton">
+        <v-row class="justify-start">
+          <Datepicker
+            v-model="birthday"
+            @blur="disableButton"
+            @cleared="disableButton"
+            :flow="flow"
+            :format="format"
+            :previewFormat="format"
+            monthNameFormat="long"
+            :locale="locale"
+            autoApply
+            :maxDate="now"
+            @update:modelValue="formatDate"
+            :enableTimePicker="false"
+          >
+            <template #trigger>
+              <v-text-field
+                clearable
+                readonly
+                v-model="v$.birthday.$model"
+                :error-messages="birthdayErrors"
                 required
-              />
+                @input="v$.birthday.$touch()"
+                @blur="v$.birthday.$touch();disableButton()"
+                @clear="disableButton"
+              >
               <template v-slot:label>
-                {{ $t('accountPage.updateUser.form.birthday') }}
-              </template>
-            </v-row>
-          </v-form>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="blue-darken-1"
-            text
-            @click="dialog = false"
-          >
-            {{ $t('accountPage.updateUser.form.closeBtn') }}
-          </v-btn>
-          <v-btn
-            color="blue-darken-1"
-            text
-            :disabled="!valid"
-            @click="update"
-          >
-            {{ $t('accountPage.updateUser.form.saveBtn') }}
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+                {{ $t('signUpPage.registration.form.birthday.label') }}
+              </template></v-text-field>
+            </template>
+          </Datepicker>
+        </v-row>
+      </v-form>
+    </v-col>
+    <v-col cols=4>
+      <v-btn
+        flat
+        text-color="blue"
+        :disabled="!valid"
+        @click="update"
+      >
+        {{ $t('accountPage.updateUser.form.saveBtn') }}
+      </v-btn>
+    </v-col>
   </v-row>
 </template>
 
 <script lang="ts">
+import { ref } from 'vue'
 import { defineComponent } from 'vue'
-import { isAllItemsExist } from '../../services/utils.service'
 import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
-import EditButton from '../EditButton.vue'
 import { useI18n } from 'vue-i18n'
-import { store } from '../../store'
-import router from '../../router'
 import Datepicker from '@vuepic/vue-datepicker'
+import '@vuepic/vue-datepicker/dist/main.css'
+import { store } from '../../store'
+import { isAllItemsExist } from '../../services/utils.service'
+import { dateFormat } from '../../services/date.service'
+
 
 export default defineComponent({
-  name: 'UserbirthdayUpdateForm',
+  name: 'UserBirthdayUpdateForm',
   components: {
-    Datepicker,
-    EditButton
+    Datepicker
   },
 
   setup: () => {
+    const flow = ref(['year', 'month', 'calendar'])
+    function padTo2Digits(num: number) {
+      return num.toString().padStart(2, '0');
+    }
+    const format = (date: Date) => {
+      return [
+          padTo2Digits(date.getDate()),
+          padTo2Digits(date.getMonth() + 1),
+          date.getFullYear(),
+        ].join('/')
+    }
+    const now = new Date()
     const { t } = useI18n()
     const v$ = useVuelidate()
     return {
+      flow,
+      format,
+      now,
       t,
-      v$
+      v$,
     }
   },
 
   data () {
     return {
-      birthday: this.birthdayLabel,
-      menu: false,
+      birthday: this.format(new Date(this.birthdayLabel)),
       valid: true,
-      dialog: false,
+      locale: 'fr',
     }
   },
 
-  validations () {
+ validations() {
     return {
       birthday: {
-        required,
-        $lazy: true
+          required,
+          $lazy: true
       },
     }
-  },
-  watch: {
-    menu (val) {
-      val && setTimeout(() => (this.activePicker = 'YEAR'))
-    },
   },
 
   props: {
@@ -115,21 +122,20 @@ export default defineComponent({
       const errors: string[] = []
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      if (!this.v$.date.$dirty) return errors
+      if (!this.v$.birthday.$dirty) return errors
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      this.v$.birthday.required.$invalid && errors.push(this.$t('signUpPage.registration.form.birthday.maxLength'))
+      this.v$.birthday.required.$invalid && errors.push(this.$t('signUpPage.registration.form.birthday.required'))
       return errors
     },
   },
   methods: {
-    save (date) {
-      this.$refs.menu.save(date)
+    formatDate (date: Date) {
+      this.birthday = this.format(date)
     },
     disableButton () {
-      const isAllRequiredItemsExist = isAllItemsExist([this.date])
-      const isFormCorrect = this.v$.$errors.length === 0 && isAllRequiredItemsExist
-      if (isFormCorrect) {
+      const isAllRequiredItemsExist = isAllItemsExist([this.birthday])
+      if (isAllRequiredItemsExist) {
         this.valid=true
       } else {
         this.valid=false
@@ -138,10 +144,9 @@ export default defineComponent({
     async update () {
       const isFormCorrect = await this.v$.$validate()
       if (isFormCorrect) {
-        const { birthday } = this
+        const birthday = dateFormat(this.birthday)
         await store.dispatch('updateUser', { birthday } ).then(() => {
-          this.dialog = false
-          router.push('/account')
+          this.$emit('displayForm')
         })
       }
     },
@@ -152,5 +157,8 @@ export default defineComponent({
 <style scoped>
   .v-btn--disabled {
     color: grey !important;
+  }
+  .dp__main {
+    width:100% !important;
   }
 </style>

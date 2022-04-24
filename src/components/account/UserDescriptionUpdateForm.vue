@@ -6,7 +6,7 @@
       persistent
     >
       <template v-slot:activator="{ props }">
-        <EditButton v-bind="props" textBtn="accountPage.updateUser.form.descriptionTooltip"></EditButton>
+        <EditButton v-bind="props" :textBtn="$t('accountPage.updateUser.form.descriptionTooltip')"></EditButton>
       </template>
       <v-card width="550">
         <v-card-title>
@@ -117,8 +117,7 @@ export default defineComponent({
   },
   methods: {
     disableButton () {
-      const isAllRequiredItemsExist = isAllItemsExist([this.description])
-      const isFormCorrect = this.v$.$errors.length === 0 && isAllRequiredItemsExist
+      const isFormCorrect = this.v$.$errors.length === 0
       if (isFormCorrect) {
         this.valid=true
       } else {

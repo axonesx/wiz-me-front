@@ -31,7 +31,10 @@ export default {
                 maxLength: `Votre nom doit être < 200 caractères.`,
                 minLength: `Votre nom doit être > 2 caractères.`,
             },
-            birthday: `Entrez votre date de naissance`
+            birthday: {
+                label: `Entrez votre date de naissance`,
+                required: `Votre anniversaire est requis.`,
+            }
         },
         error: {
             text: `Une erreur est survenue durant la création de votre compte, veuillez recommencer s'il vous plait.`,
