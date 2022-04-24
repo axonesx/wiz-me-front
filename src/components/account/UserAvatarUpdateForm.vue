@@ -54,14 +54,11 @@
 import { defineComponent } from 'vue'
 import { mapGetters } from 'vuex'
 import { isAllItemsExist } from '../../services/utils.service'
-import useVuelidate, { ValidationRuleWithoutParams, ValidationRuleWithParams } from '@vuelidate/core'
+import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 import { store } from '../../store'
 import router from '../../router'
 import EditButton from '../EditButton.vue'
-
-const passwordRegex = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
-const isPassword = (value: string) => value.match(passwordRegex)
 
 export default defineComponent({
   name: 'UserAvatarUpdateForm',

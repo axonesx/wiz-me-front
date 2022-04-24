@@ -40,9 +40,16 @@
         class="mb-6"
         color="success"
         :disabled="valid"
+        :loading="true"
         @click="login"
+        width=150
       >
-      {{ $t('loginPage.login.button') }}
+        <v-progress-circular
+          class='mx-auto'
+          v-if="authStatus==='loading'"
+          indeterminate
+        ></v-progress-circular>
+        <div v-else>{{ $t('loginPage.login.button') }}</div>
       </v-btn>
       <v-divider></v-divider>
       <span class="mt-6">{{ $t('loginPage.login.registration.span') }}

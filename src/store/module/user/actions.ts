@@ -1,6 +1,6 @@
 import { USER_REQUEST, USER_SUCCESS, USER_ERROR, USER_UPDATE_ERROR, USER_UPDATE_REQUEST, USER_UPDATE_SUCCESS } from './mutation-types'
 import { IAction } from '@/store/types/action'
-import { IState, IUser, IUserToUpdate } from './types'
+import { IState, IUserToUpdate } from './types'
 import { httpClientApi } from '@/api/helpers/http-client-api'
 import { store } from '@/store'
 

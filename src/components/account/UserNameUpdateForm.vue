@@ -58,8 +58,14 @@
             text
             :disabled="!valid"
             @click="update"
+            width=150
           >
-            {{ $t('accountPage.updateUser.form.saveBtn') }}
+            <v-progress-circular
+              class='mx-auto'
+              v-if="updateStatus==='loading'"
+              indeterminate
+            ></v-progress-circular>
+            <div v-else>{{ $t('accountPage.updateUser.form.saveBtn') }}</div>
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -76,6 +82,7 @@ import EditButton from '../EditButton.vue'
 import { useI18n } from 'vue-i18n'
 import { store } from '../../store'
 import router from '../../router'
+import { mapGetters } from 'vuex'
 
 export default defineComponent({
   name: 'UserNameUpdateForm',
@@ -130,6 +137,9 @@ export default defineComponent({
     },
   },
   computed: {
+    ...mapGetters({
+      updateStatus: 'getUserUpdateRequestStatus',
+    }),
     firstNameErrors () {
       const errors: string[] = []
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment

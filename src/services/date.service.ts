@@ -36,9 +36,24 @@ const formatDate = (date: Date): string => {
     return dayjs(date).format('DD MMMM, YYYY')
 }
 
+
+const formatDateInput = (date: Date): string => {
+    if(dayjs.locale() === 'fr') {
+        return dayjs(date).format('DD/MM/YYYY')
+    } else if (dayjs.locale() === 'en') {
+        return dayjs(date).format('MM/DD/YYYY')
+    }
+    return dayjs(date).format('DD/MM/YYYY')
+}
+
 const dateFormat = (dateString: string): string => {
-        const parts = dateString.split('/')
-        return new Date(parseInt(parts[2], 10), parseInt(parts[1], 10) - 1,  parseInt(parts[0], 10)).toISOString()
+    const parts = dateString.split('/')
+    if(dayjs.locale() === 'fr') {
+        return new Date(parseInt(parts[2], 10), parseInt(parts[1], 10) - 1, parseInt(parts[0], 10)).toISOString()
+    } else if (dayjs.locale() === 'en') {
+        return new Date(parseInt(parts[2], 10), parseInt(parts[0], 10) - 1, parseInt(parts[1], 10)).toISOString()
+    }
+    return new Date(parseInt(parts[2], 10), parseInt(parts[1], 10) - 1, parseInt(parts[0], 10)).toISOString()
 }
 
 export {
@@ -49,5 +64,6 @@ export {
     yearBetweenTwoDates,
     durationBetweenTwoDates,
     formatDate,
+    formatDateInput,
     dateFormat,
 }

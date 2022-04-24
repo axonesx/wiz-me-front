@@ -11,8 +11,6 @@
             @cleared="disableButton"
             :flow="flow"
             :format="format"
-            :previewFormat="format"
-            monthNameFormat="long"
             :locale="locale"
             autoApply
             :maxDate="now"
@@ -44,8 +42,14 @@
         text-color="blue"
         :disabled="!valid"
         @click="update"
+        width=150
       >
-        {{ $t('accountPage.updateUser.form.saveBtn') }}
+        <v-progress-circular
+          class='mx-auto'
+          v-if="updateStatus==='loading'"
+          indeterminate
+        ></v-progress-circular>
+        <div v-else>{{ $t('accountPage.updateUser.form.saveBtn') }}</div>
       </v-btn>
     </v-col>
   </v-row>
@@ -61,7 +65,8 @@ import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import { store } from '../../store'
 import { isAllItemsExist } from '../../services/utils.service'
-import { dateFormat } from '../../services/date.service'
+import { dateFormat, formatDateInput } from '../../services/date.service'
+import { mapGetters } from 'vuex'
 
 
 export default defineComponent({
@@ -96,7 +101,7 @@ export default defineComponent({
 
   data () {
     return {
-      birthday: this.format(new Date(this.birthdayLabel)),
+      birthday: formatDateInput(new Date(this.birthdayLabel)),
       valid: true,
       locale: 'fr',
     }
@@ -118,6 +123,9 @@ export default defineComponent({
     },
   },
   computed: {
+    ...mapGetters({
+      updateStatus: 'getUserUpdateRequestStatus',
+    }),
     birthdayErrors () {
       const errors: string[] = []
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -131,7 +139,7 @@ export default defineComponent({
   },
   methods: {
     formatDate (date: Date) {
-      this.birthday = this.format(date)
+      this.birthday = formatDateInput(date)
     },
     disableButton () {
       const isAllRequiredItemsExist = isAllItemsExist([this.birthday])

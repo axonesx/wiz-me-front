@@ -1,6 +1,6 @@
 import { AUTH_REQUEST, AUTH_SUCCESS, AUTH_ERROR, LOGOUT_REQUEST, LOGOUT_SUCCESS, LOGOUT_ERROR  } from './/mutation-types'
 import { USER_LOGIN, USER_LOGOUT, TOKEN_LOGIN } from '../../module/user/mutation-types'
-import { isActiveToken, removeTokenInLocalStorage, setTokenInLocalStorage } from '@/services/local-storage.service'
+import { removeTokenInLocalStorage, setTokenInLocalStorage } from '@/services/local-storage.service'
 import { IAction, IActionWithoutPayload } from '@/store/types/action'
 import { httpClientApi } from '@/api/helpers/http-client-api'
 import { IState } from './types'

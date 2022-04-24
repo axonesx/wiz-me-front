@@ -45,8 +45,14 @@
             text
             :disabled="!valid"
             @click="update"
+            width=150
           >
-            {{ $t('accountPage.updateUser.form.saveBtn') }}
+            <v-progress-circular
+              class='mx-auto'
+              v-if="updateStatus==='loading'"
+              indeterminate
+            ></v-progress-circular>
+            <div v-else>{{ $t('accountPage.updateUser.form.saveBtn') }}</div>
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -56,13 +62,13 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { isAllItemsExist } from '../../services/utils.service'
 import useVuelidate from '@vuelidate/core'
-import { maxLength, minLength, required } from '@vuelidate/validators'
+import { maxLength } from '@vuelidate/validators'
 import EditButton from '../EditButton.vue'
 import { useI18n } from 'vue-i18n'
 import { store } from '../../store'
 import router from '../../router'
+import { mapGetters } from 'vuex'
 
 export default defineComponent({
   name: 'UserDescriptionUpdateForm',
@@ -116,6 +122,9 @@ export default defineComponent({
     },
   },
   methods: {
+    ...mapGetters({
+      updateStatus: 'getUserUpdateRequestStatus',
+    }),
     disableButton () {
       const isFormCorrect = this.v$.$errors.length === 0
       if (isFormCorrect) {

@@ -91,8 +91,6 @@
         @cleared="disableButton"
         :flow="flow"
         :format="format"
-        :previewFormat="format"
-        monthNameFormat="long"
         :locale="locale"
         autoApply
         :maxDate="now"
@@ -120,8 +118,14 @@
         color="success"
         :disabled="valid"
         @click="signUp"
+        width=150
       >
-      {{ $t('signUpPage.registration.button') }}
+        <v-progress-circular
+          class='mx-auto'
+          v-if="signUpStatus==='loading'"
+          indeterminate
+        ></v-progress-circular>
+        <div v-else>{{ $t('signUpPage.registration.button') }}</div>
       </v-btn>
       <v-divider></v-divider>
       <span>{{ $t('signUpPage.registration.login.span') }}<a href="/login">{{ $t('signUpPage.registration.login.link') }}</a></span>
@@ -139,7 +143,7 @@ import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import { isAllItemsExist } from '../../services/utils.service'
 import { mapGetters } from 'vuex'
-import { dateFormat } from '../../services/date.service'
+import { formatDateInput, dateFormat } from '../../services/date.service'
 
 const passwordRegex = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
 const isPassword = (value) => value.match(passwordRegex)
@@ -265,7 +269,7 @@ export default {
   },
   methods: {
     formatDate (date) {
-      this.birthday = this.format(date)
+      this.birthday = formatDateInput(date)
     },
     async disableButton () {
       const isAllRequiredItemsExist = isAllItemsExist([this.email,this.password,this.confirmPassword,this.firstName,this.lastName,this.birthday])

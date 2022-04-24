@@ -1,9 +1,8 @@
-import { TOKEN_LOGIN, TOKEN_LOGOUT, USER_LOGIN, USER_LOGOUT, USER_REQUEST, USER_UPDATE_ERROR, USER_UPDATE_REQUEST, USER_UPDATE_SUCCESS } from './mutation-types'
+import { TOKEN_LOGIN, USER_LOGIN, USER_LOGOUT, USER_REQUEST, USER_UPDATE_ERROR, USER_UPDATE_REQUEST, USER_UPDATE_SUCCESS } from './mutation-types'
 import { USER_SUCCESS } from './mutation-types'
 import { USER_ERROR } from './mutation-types'
 import { IState, IUser } from './types'
 import { IMutation, IMutationWithoutPayload } from '@/store/types/mutation'
-import { initialState } from './mocks'
 
 const userRequest: IMutationWithoutPayload<IState> = (state) => {
   state.userRequestStatus = 'loading'

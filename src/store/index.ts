@@ -7,9 +7,7 @@ import authentication from './module/authentication'
 import user from './module/user'
 import createPersistedState from "vuex-persistedstate"
 import SecureLS from "secure-ls"
-import { isActiveToken } from '@/services/local-storage.service'
-import { createStore } from "vuex";
-import { initialState } from './module/user/mocks'
+import { createStore } from "vuex"
 
 const ls = new SecureLS({ isCompression: false })
 

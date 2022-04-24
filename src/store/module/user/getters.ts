@@ -1,7 +1,6 @@
-import { durationBetweenTwoDates, formatDate } from "@/services/date.service";
-import { IDuration } from "@/types/date";
-import { initialState } from "./mocks";
-import { IState, IUser } from "./types";
+import { durationBetweenTwoDates, formatDate } from "@/services/date.service"
+import { IDuration } from "@/types/date"
+import { IState, IUser } from "./types"
 
 
     const isProfileLoaded = (state: IState): boolean => !!state.user?.firstName
@@ -23,6 +22,8 @@ import { IState, IUser } from "./types";
 
     const isAuthenticated = (state: IState): boolean => !!state.token
 
+    const getUserUpdateRequestStatus = (state: IState): string => state.userUpdateRequestStatus
+
 
 export default {
     isProfileLoaded,
@@ -31,4 +32,5 @@ export default {
     getBirthday,
     getToken,
     isAuthenticated,
+    getUserUpdateRequestStatus,
 }

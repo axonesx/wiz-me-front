@@ -59,7 +59,7 @@
 
       <v-row class="ma-4">
         <v-col cols="10" class="pl-10">
-          <span v-if="user.description"><h4>Description :</h4>{{ user.description }}</span>
+          <span class="description" v-if="user.description"><h4>Description :</h4>{{ user.description }}</span>
           <span v-else><h4>Description :</h4>Aucune Description</span>
         </v-col>
         <v-col cols="2" class="d-flex align-center">
@@ -131,8 +131,7 @@ export default defineComponent({
   .v-col:hover > .by-col{
     display: flex;
   }
-
-  /* .editUserBirthday {
-    display: none;
-  } */
+  .description {
+    white-space: pre-wrap;
+  }
 </style>
