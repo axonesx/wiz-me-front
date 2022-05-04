@@ -1,10 +1,9 @@
 <template>
-  <v-row>
-    <v-col cols=8>
+  <v-row class="px-5">
+    <v-col cols=8 class="d-flex justify-center">
       <v-form
         @change="disableButton"
         @blur="disableButton">
-        <v-row class="justify-start">
           <Datepicker
             v-model="birthday"
             @blur="disableButton"
@@ -33,16 +32,14 @@
               </template></v-text-field>
             </template>
           </Datepicker>
-        </v-row>
       </v-form>
     </v-col>
-    <v-col cols=4>
+    <v-col cols=4 class="d-flex mt-3 justify-end">
       <v-btn
         flat
         text-color="blue"
         :disabled="!valid"
         @click="update"
-        width=150
       >
         <v-progress-circular
           class='mx-auto'
@@ -142,18 +139,13 @@ export default defineComponent({
       this.birthday = formatDateInput(date)
     },
     disableButton () {
-      const isAllRequiredItemsExist = isAllItemsExist([this.birthday])
-      if (isAllRequiredItemsExist) {
-        this.valid=true
-      } else {
-        this.valid=false
-      }
+      this.valid = isAllItemsExist([this.birthday])
     },
     async update () {
       const isFormCorrect = await this.v$.$validate()
       if (isFormCorrect) {
         const birthday = dateFormat(this.birthday)
-        await store.dispatch('updateUser', { birthday } ).then(() => {
+        store.dispatch('updateUser', { birthday } ).then(() => {
           this.$emit('displayForm')
         })
       }
@@ -165,6 +157,9 @@ export default defineComponent({
 <style scoped>
   .v-btn--disabled {
     color: grey !important;
+  }
+  .v-form {
+    width:100%;
   }
   .dp__main {
     width:100% !important;

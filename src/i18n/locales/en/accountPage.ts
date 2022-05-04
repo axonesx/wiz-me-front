@@ -1,6 +1,13 @@
 export default {
     updateUser: {
+        email: `Email : `,
+        wizzerSince: `Wizzer since : `,
+        birthday: `Birthday : `,
+        description: `Description : `,
         form: {
+            avatarTitle: `Update your avatar :`,
+            avatarTooltip: `Edit avatar`,
+            file: `Select a file: .jpg .png`,
             nameTitle: `Update your names :`,
             nameTooltip: `Edit names`,
             lastName: `Enter your last name`,
@@ -13,6 +20,7 @@ export default {
             birthday: `Enter your birthday`,
             saveBtn: `update`,
             closeBtn: `cancel`,
+            deleteBtn: `delete`,
         }
     }
 }

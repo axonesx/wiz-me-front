@@ -8,7 +8,7 @@
       <template v-slot:activator="{ props }">
         <EditButton v-bind="props" :textBtn="$t('accountPage.updateUser.form.nameTooltip')"></EditButton>
       </template>
-      <v-card width="550">
+      <v-card>
         <v-card-title>
           <span class="text-h5">{{ $t('accountPage.updateUser.form.nameTitle') }}</span>
         </v-card-title>
@@ -81,7 +81,6 @@ import { maxLength, minLength, required } from '@vuelidate/validators'
 import EditButton from '../EditButton.vue'
 import { useI18n } from 'vue-i18n'
 import { store } from '../../store'
-import router from '../../router'
 import { mapGetters } from 'vuex'
 
 export default defineComponent({
@@ -175,21 +174,14 @@ export default defineComponent({
   },
   methods: {
     disableButton () {
-      const isAllRequiredItemsExist = isAllItemsExist([this.firstName,this.lastName])
-      const isFormCorrect = this.v$.$errors.length === 0 && isAllRequiredItemsExist
-      if (isFormCorrect) {
-        this.valid=true
-      } else {
-        this.valid=false
-      }
+      this.valid = this.v$.$errors.length === 0 && isAllItemsExist([this.firstName,this.lastName])
     },
     async update () {
       const isFormCorrect = await this.v$.$validate()
       if (isFormCorrect) {
         const { firstName, lastName } = this
-        await store.dispatch('updateUser', { firstName, lastName } ).then(() => {
+        store.dispatch('updateUser', { firstName, lastName } ).then(() => {
           this.dialog = false
-          router.push('/account')
         })
       }
     },

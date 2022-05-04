@@ -6,6 +6,8 @@ const initialState: IState = {
     token: null,
     userRequestStatus: '',
     userUpdateRequestStatus: '',
+    userUploadAvatarRequestStatus: '',
+    userDeleteAvatarRequestStatus: '',
 }
 
 const mocks = {

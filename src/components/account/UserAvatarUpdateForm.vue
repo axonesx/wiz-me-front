@@ -2,47 +2,91 @@
    <v-row justify="center">
     <v-dialog
       v-model="dialog"
+      transition="dialog-bottom-transition"
       persistent
+      max-width="100%"
     >
+      <!-- v-if="!this.files" -->
       <template v-slot:activator="{ props }">
-        <EditButton v-bind="props" textBtn="Edit Description"></EditButton>
+        <EditButton v-bind="props"  :textBtn="$t('accountPage.updateUser.form.avatarTooltip')"></EditButton>
       </template>
-      <v-card width="550">
-        <v-card-title>
-          <span class="text-h5">User Profile</span>
+      <v-card>
+        <v-card-title class="d-flex justify-space-between">
+          <span class="text-h5">{{ $t('accountPage.updateUser.form.avatarTitle') }}</span>
+          <v-icon
+          class="close-icon"
+          v-if="cropper"
+          @click="cropper=false;this.files=[]">
+            mdi-close
+          </v-icon>
         </v-card-title>
         <v-card-text>
           <v-form
             @change="disableButton"
-            @blur="disableButton">
+            @blur="disableButton"
+            enctype="multipart/form-data"
+            >
             <v-row>
+              <cropper
+                v-if="cropper"
+                class="cropper"
+                ref="cropper"
+                :src="image"
+                :stencil-props="{
+                  aspectRatio: 1/1
+                }"
+                @change="change"
+              />
               <v-file-input
+                v-else
+                v-model="files"
+                ref="files"
+                @change="loadImage($event)"
+                accept="image/*"
                 label="File input"
                 filled
                 prepend-icon="mdi-camera"
               >
               <template v-slot:label>
-                {{ $t('updateUser.form.file') }}
+                {{ $t('accountPage.updateUser.form.file') }}
               </template></v-file-input>
             </v-row>
           </v-form>
-          <small>*indicates required field</small>
         </v-card-text>
-        <v-card-actions>
+        <v-card-actions class="mt-2">
           <v-spacer></v-spacer>
           <v-btn
             color="blue-darken-1"
             text
-            @click="dialog = false"
+            @click="resetDialog"
           >
-            Close
+            {{ $t('accountPage.updateUser.form.closeBtn') }}
           </v-btn>
           <v-btn
             color="blue-darken-1"
             text
-            @click="dialog = false"
+            @click="deleteAvatar"
+            :disabled="user.avatarPath===null"
           >
-            Save
+            <v-progress-circular
+              class='mx-auto'
+              v-if="deleteAvatarStatus==='loading'"
+              indeterminate
+            ></v-progress-circular>
+            <div v-else>{{ $t('accountPage.updateUser.form.deleteBtn') }}</div>
+          </v-btn>
+          <v-btn
+            color="blue-darken-1"
+            text
+            @click="uploadAvatar"
+            :disabled="!valid"
+          >
+            <v-progress-circular
+              class='mx-auto'
+              v-if="uploadAvatarStatus==='loading'"
+              indeterminate
+            ></v-progress-circular>
+            <div v-else>{{ $t('accountPage.updateUser.form.saveBtn') }}</div>
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -53,12 +97,13 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { mapGetters } from 'vuex'
-import { isAllItemsExist } from '../../services/utils.service'
 import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 import { store } from '../../store'
-import router from '../../router'
 import EditButton from '../EditButton.vue'
+import { Cropper } from 'vue-advanced-cropper'
+import 'vue-advanced-cropper/dist/style.css';
+import { isAllItemsExist } from '../../services/utils.service'
 
 export default defineComponent({
   name: 'UserAvatarUpdateForm',
@@ -68,33 +113,23 @@ export default defineComponent({
     }
   },
   components:{
-      EditButton
-  },
-  props: {
-    firstNameLabel: {
-        type: String,
-    },
-    lastNameLabel: {
-        type: String,
-    },
+      EditButton,
+      Cropper,
   },
 
   data() {
     return {
-      firstName: '',
-      lastName: '',
-      valid: true,
+      files: [],
+      image: '',
+      valid: false,
+      cropper: false,
       dialog: false,
     }
   },
 
   validations() {
     return {
-      firstName: {
-          required,
-          $lazy: true
-      },
-      lastName: {
+      files: {
           required,
           $lazy: true
       },
@@ -103,44 +138,82 @@ export default defineComponent({
 
   computed: {
     ...mapGetters({
+      user: 'getProfile',
+      uploadAvatarStatus: 'getUserUploadAvatarRequestStatus',
+      deleteAvatarStatus: 'getUserDeleteAvatarRequestStatus',
     }),
-    // firstNameErrors () {
-    //   const errors: string[] = []
-    //   const firstName = this.v$.firstName.$dirty
-    //   if (!this.v$.firstName.$dirty) return errors
-    //   this.v$.firstName.required.$invalid && errors.push('First name is required.')
-    //   return errors
-    // },
-    // lastNameErrors () {
-    //   const errors: string[] = []
-    //   if (!this.v$.lastName.$dirty) return errors
-    //   this.v$.lastName.required.$invalid && errors.push('Last name is required.')
-    //   return errors
-    // },
   },
   methods: {
-    async disableButton () {
-      const isAllRequiredItemsExist = isAllItemsExist([this.firstName,this.lastName])
-      const isFormCorrect = this.v$.$errors.length === 0 && isAllRequiredItemsExist
-      if (isFormCorrect) {
-        this.valid=false
-      } else {
-        this.valid=true
+    resetDialog () {
+      this.dialog=false
+      this.files=[]
+      this.cropper=false
+      this.valid=false
+    },
+    disableButton () {
+      this.valid = isAllItemsExist([this.files])
+    },
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    change({ coordinates, canvas }) {
+			console.log(coordinates, canvas)
+		},
+    loadImage() {
+      // Ensure that you have a file before attempting to read it
+      this.cropper = true
+      if (this.files && this.files[0]) {
+        // create a new FileReader to read this image and convert to base64 format
+        var reader = new FileReader();
+        // Define a callback function to run, when FileReader finishes its job
+        reader.onload = (e) => {
+          // Note: arrow function used here, so that "this.imageData" refers to the imageData of Vue component
+          // Read image as base64 and set to imageData
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          this.image = e.target.result;
+        };
+        // Start the reader job - read file as a data url (base64 format)
+        reader.readAsDataURL(this.files[0]);
       }
     },
-    async signUp () {
-      const isFormCorrect = await this.v$.$validate()
-      if (isFormCorrect) {
-        const {firstName, lastName } = this
-        store.dispatch('updateUser', { firstName, lastName } ).then(() => {
-          router.push('/')
-        })
+    uploadAvatar () {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+      const { canvas } = this.$refs.cropper.getResult()
+      if (canvas) {
+        canvas.toBlob((file: Blob) => {
+          store.dispatch('uploadAvatar', file ).then(() => {
+            this.resetDialog()
+          })
+        }, "image/jpeg")
       }
     },
+    deleteAvatar () {
+      store.dispatch('deleteAvatar').then(() => {
+        this.resetDialog()
+      })
+    }
   },
 })
 </script>
 
-<style scoped>
-
+<style>
+  .close-icon:hover {
+    cursor: pointer;
+  }
+  .cropper {
+    height: 600px;
+    width: 600px !important;
+    background: #DDD;
+  }
+  .v-btn--disabled {
+    color: grey !important;
+  }
+  .v-overlay__content {
+    max-height: 100% !important;
+    max-width: 100% !important;
+  }
+  .v-overlay {
+    padding:0%;
+  }
 </style>

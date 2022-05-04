@@ -1,5 +1,6 @@
 import Api from "@/api"
 import { httpClientApi } from "@/api/helpers/http-client-api"
+import { httpClientIntegration } from "@/api/helpers/http-client-integration"
 import { FETCH_PARAMETERS, FETCH_PARAMETERS_SUCCESS, SET_GLOBAL_ERROR } from "./mutation-types"
 import { IRootStoreState } from "./types"
 import { IAction } from "./types/action"
@@ -9,6 +10,7 @@ const fetchParameters: IAction<IRootStoreState, Api> = async ({ commit }, api) =
     const request = await api.Parameters.fetch()
     const apiUrl = request.apiUrl
     httpClientApi.defaults.baseURL = apiUrl
+    httpClientIntegration.defaults.baseURL = apiUrl
     commit(FETCH_PARAMETERS_SUCCESS)
 }
 

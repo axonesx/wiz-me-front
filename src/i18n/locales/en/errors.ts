@@ -4,5 +4,8 @@ export default {
     closeBtn: `close`,
     signUp: {
         emailNotConfirmed: `Your mail is not confirmed, please check your mails.`
+    },
+    token: {
+        missing: `Your session is not active.`
     }
 }

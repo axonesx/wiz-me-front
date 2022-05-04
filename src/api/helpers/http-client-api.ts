@@ -13,5 +13,4 @@ const httpClientApi = Axios.create({
 httpClientApi.interceptors.request.use(addAuthenticationToken)
 httpClientApi.interceptors.response.use((response: AxiosResponse) => response.data, manageApiError)
 
-
 export { httpClientApi }

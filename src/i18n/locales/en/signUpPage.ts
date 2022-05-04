@@ -34,6 +34,9 @@ export default {
             birthday: {
                 label: `Enter your birthday`,
                 required: `Birthday is required.`,
+            },
+            description: {
+                maxLength: `Description should be < 1000 caracters.`,
             }
         },
         error: {

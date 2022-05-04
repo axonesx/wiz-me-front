@@ -1,73 +1,84 @@
 <template>
   <v-card class="ma-8">
-    <v-row class="ma-4">
-      <v-col cols="3" class="d-flex align-center">
+    <v-row class="mx-4 mt-2 d-flex align-center justify-space-between">
+      <v-col cols="2" class="d-flex justify-center">
+      </v-col>
+      <v-col cols="8" class="d-flex justify-center">
         <v-avatar
         color="info"
         size="128"
-        class="ml-6">
-          <span class="white--text text-h5">AW</span>
+        >
+          <img
+            v-if="user.avatarPath"
+            :src="user.avatarPath"
+          >
+          <span v-else class="white--text text-h5">{{ initial }}</span>
         </v-avatar>
       </v-col>
-      <v-col cols="1" class="d-flex align-center">
+      <v-col cols="2">
         <UserAvatarUpdateForm
-          class="edit-btn by-col"
-          :firstNameLabel=user.firstName
-          :lastNameLabel=user.lastName
+          class="edit-btn by-row"
         >
         </UserAvatarUpdateForm>
       </v-col>
-      <v-col cols="6"
-        class="pt-7">
-        <v-card-title>{{ user.firstName }} {{ user.lastName }}</v-card-title>
-        <v-card-subtitle><h4><pre>Email : </pre></h4> {{ user.email }}</v-card-subtitle>
-        <v-card-subtitle>Wizzer depuis : {{ durationBeingUser.duration }} {{ durationBeingUser.type === 0 ? durationBeingUser.duration > 1 ? $t('app.days') : $t('app.day') : durationBeingUser.type === 1 ? durationBeingUser.duration > 1 ? $t('app.monthes') : $t('app.month') : durationBeingUser.duration > 1 ? $t('app.years') : $t('app.year')}}</v-card-subtitle>
+    </v-row>
+    <v-row class="mx-4 d-flex align-center justify-space-between">
+      <v-col cols="2" class="d-flex justify-center">
       </v-col>
-      <v-col cols="2" class="d-flex align-center justify-end">
+      <v-col cols="8" class="d-flex justify-center">
+        <div>
+          <v-card-title class="d-flex justify-center">{{ user.firstName }} {{ user.lastName }}</v-card-title>
+          <v-card-subtitle class="d-flex justify-center"><h4><pre>{{$t('accountPage.updateUser.email')}}</pre></h4> {{ user.email }}</v-card-subtitle>
+          <v-card-subtitle class="d-flex justify-center">{{$t('accountPage.updateUser.wizzerSince')}}{{ durationBeingUser.duration }} {{ durationBeingUser.type === 0 ? durationBeingUser.duration > 1 ? $t('app.days') : $t('app.day') : durationBeingUser.type === 1 ? durationBeingUser.duration > 1 ? $t('app.monthes') : $t('app.month') : durationBeingUser.duration > 1 ? $t('app.years') : $t('app.year')}}</v-card-subtitle>
+        </div>
+      </v-col>
+      <v-col cols="2">
         <UserNameUpdateForm
-          class="edit-btn by-col"
-          :firstNameLabel=user.firstName
-          :lastNameLabel=user.lastName
+          class="edit-btn by-row"
+          :firstNameLabel="user.firstName"
+          :lastNameLabel="user.lastName"
         >
         </UserNameUpdateForm>
       </v-col>
     </v-row>
-    <v-divider class="mx-16 mb-1"></v-divider>
-      <v-row class="ma-5">
-        <v-col cols="3" class="pl-10">
-            <span><h4>Anniversaire :</h4>{{ birthday }}</span>
-        </v-col>
-        <v-col cols="7" class="pl-10">
-            <div
-              :style="{ display: 'none' }"
-              ref="editUserBirthday">
-              <UserBirthdayUpdateForm
-                :birthdayLabel="user.birthday"
-                @displayForm="displayForm"
-              ></UserBirthdayUpdateForm>
-            </div>
-        </v-col>
-        <v-col cols="2" class="d-flex justify-center">
-          <EditButton
-            class="edit-btn by-row"
-            :textBtn="$t('accountPage.updateUser.form.birthdayTooltip')"
-            @click="displayForm"
-          >
-          </EditButton>
-        </v-col>
-      </v-row>
+    <v-divider class="mx-16 my-4"></v-divider>
+    <v-row class="ma-4 d-flex align-center">
+      <v-col cols="10" class="pl-10">
+          <span><h4>{{$t('accountPage.updateUser.birthday')}}</h4>{{ birthday }}</span>
+      </v-col>
+      <v-col cols="2" class="d-flex justify-center">
+        <EditButton
+          class="edit-btn by-row"
+          :textBtn="$t('accountPage.updateUser.form.birthdayTooltip')"
+          @click="displayForm"
+        >
+        </EditButton>
+      </v-col>
+    </v-row>
+    <v-row class="mx-6 d-flex align-center">
+      <v-col cols="12">
+          <div
+            :style="{ display: 'none' }"
+            ref="editUserBirthday">
+            <UserBirthdayUpdateForm
+              :birthdayLabel="new Date(user.birthday)"
+              @displayForm="displayForm"
+            ></UserBirthdayUpdateForm>
+          </div>
+      </v-col>
+    </v-row>
 
-      <v-row class="ma-4">
-        <v-col cols="10" class="pl-10">
-          <span class="description" v-if="user.description"><h4>Description :</h4>{{ user.description }}</span>
-          <span v-else><h4>Description :</h4>Aucune Description</span>
-        </v-col>
-        <v-col cols="2" class="d-flex align-center">
-          <UserDescriptionUpdateForm class="edit-btn by-row"
-          :descriptionLabel=user.description>
-          </UserDescriptionUpdateForm>
-        </v-col>
-      </v-row>
+    <v-row class="mx-4 mb-4 d-flex align-center">
+      <v-col cols="10" class="pl-10">
+        <span class="description" v-if="user.description"><h4>Description :</h4>{{ user.description }}</span>
+        <span v-else><h4>{{$t('accountPage.updateUser.description')}}</h4>Aucune Description</span>
+      </v-col>
+      <v-col cols="2">
+        <UserDescriptionUpdateForm class="edit-btn by-row"
+        :descriptionLabel="user.description">
+        </UserDescriptionUpdateForm>
+      </v-col>
+    </v-row>
 
   </v-card>
 </template>
@@ -96,6 +107,7 @@ export default defineComponent({
       user: 'getProfile',
       birthday: 'getBirthday',
       durationBeingUser: 'getDurationBeingUser',
+      initial: 'getInitial',
     })
   },
   methods: {
@@ -133,5 +145,10 @@ export default defineComponent({
   }
   .description {
     white-space: pre-wrap;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
   }
 </style>

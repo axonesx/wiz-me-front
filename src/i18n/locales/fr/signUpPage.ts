@@ -34,6 +34,9 @@ export default {
             birthday: {
                 label: `Entrez votre date de naissance`,
                 required: `Votre anniversaire est requis.`,
+            },
+            description: {
+                maxLength: `La description doit être < 1000 caractères.`,
             }
         },
         error: {

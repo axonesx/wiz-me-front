@@ -13,6 +13,11 @@ function manageApiError(error: AxiosError): Promise<RequestError | ApiError> {
             store.dispatch(LOGOUT_SUCCESS)
             store.dispatch(USER_LOGOUT)
             router.push('/login')
+            dispatchGlobalError('token.missing')
+            return Promise.reject(new ApiError(response.statusText, response.status, error.code))
+        } else if (response.status === 500) {
+            dispatchGlobalError('unknown')
+            return Promise.reject(new ApiError(response.statusText, response.status, error.code))
         }
         dispatchGlobalError(response)
         return Promise.reject(new ApiError(response.statusText, response.status, error.code))
@@ -31,6 +36,24 @@ function dispatchGlobalError(response: AxiosResponse | string) {
     }
 
     store.dispatch('setGlobalError', errorMessage)
+}
+
+async function manageIntegrationFileErrors(error: AxiosError): Promise<RequestError | ApiError> {
+    const { response } = error
+    if (response) {
+      if (response.status === 401) {
+          store.dispatch(USER_LOGOUT)
+          store.dispatch(LOGOUT_SUCCESS)
+          router.push('/login')
+          dispatchGlobalError('token.missing')
+      } else if (response.status === 500) {
+        dispatchGlobalError('unknown')
+        return Promise.reject(new ApiError(response.statusText, response.status, error.code))
+      }
+      return Promise.reject(new ApiError(response.statusText, response.status, error.code))
+    }
+
+    return Promise.reject(new RequestError(error.message))
   }
 
- export { manageApiError, }
+ export { manageApiError, manageIntegrationFileErrors, }

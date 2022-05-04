@@ -1,29 +1,21 @@
 interface IUser {
-    id: number,
+    id: number
     email: string
     firstName: string
     lastName: string
     birthday: Date
-    description: string
+    description?: string
+    avatarPath?: string
     createdAt: Date
 }
-
-interface IUserToUpdate {
-    id: number
-    email?: string
-    password?: string
-    firstName?: string
-    lastName?: string
-    birthday?: Date
-    description?: string
-}
-
 
 interface IState {
     user: IUser | null
     token: string | null
     userRequestStatus: string
     userUpdateRequestStatus: string
+    userUploadAvatarRequestStatus: string
+    userDeleteAvatarRequestStatus: string
 }
 
-export { IState, IUser, IUserToUpdate}
+export { IState, IUser, }
