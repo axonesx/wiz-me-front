@@ -13,7 +13,7 @@ function manageApiError(error: AxiosError): Promise<RequestError | ApiError> {
             store.dispatch(LOGOUT_SUCCESS)
             store.dispatch(USER_LOGOUT)
             router.push('/login')
-            dispatchGlobalError('token.missing')
+            dispatchGlobalError('auth.token.missing')
             return Promise.reject(new ApiError(response.statusText, response.status, error.code))
         } else if (response.status === 500) {
             dispatchGlobalError('unknown')
