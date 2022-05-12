@@ -45,7 +45,7 @@ async function manageIntegrationFileErrors(error: AxiosError): Promise<RequestEr
           store.dispatch(USER_LOGOUT)
           store.dispatch(LOGOUT_SUCCESS)
           router.push('/login')
-          dispatchGlobalError('token.missing')
+          dispatchGlobalError('auth.token.missing')
       } else if (response.status === 500) {
         dispatchGlobalError('unknown')
         return Promise.reject(new ApiError(response.statusText, response.status, error.code))

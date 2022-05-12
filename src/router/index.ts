@@ -6,6 +6,7 @@ import LoginView from '../views/login/LoginView.vue'
 import SignUpView from '../views/signUp/SignUpView.vue'
 import NotFoundView from '../views/notFound/NotFoundView.vue'
 import AccountView from '../views/account/AccountView.vue'
+import { isActiveToken } from '@/services/local-storage.service'
 
 const HOME_PAGE_PATH = '/home'
 const LOGIN_PAGE_PATH = '/login'
@@ -64,14 +65,16 @@ const router = createRouter({
   routes
 })
 
-const isAuthenticated = () => {
-  return store.getters.isAuthenticated
+const isAuthenticated = (): boolean => {
+  const isAuthenticated = store.getters.isAuthenticated
+  const isStillActive = isActiveToken()
+  return isAuthenticated && isStillActive
 }
 
 router.beforeEach(async (to) => {
   await handleFetchParameters()
-  if(!isAuthenticated() && to.name !== 'login' && to.name !== 'sign-up') return { name: 'login' }
   if(to.name === 'login' || to.name === 'sign-up') logout()
+  if(!isAuthenticated() && to.name !== 'login' && to.name !== 'sign-up') return { name: 'login' }
 })
 
 export default router
