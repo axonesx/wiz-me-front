@@ -4,12 +4,40 @@ export default {
         subtitle: `Please register yourself`,
         button: `SIGN UP`,
         form: {
-            email:`Enter your Email`,
-            password:`Enter your Password`,
-            confirmPassword:`Confirm your Password`,
-            firstName:`Enter your first name`,
-            lastName:`Enter your last name`,
-            birthday: `Enter your birthday`
+            email: {
+                label: `Enter your email`,
+                required: `Email is required.`,
+                isEmail: `Must be an email.`,
+            },
+            password: {
+                label: `Enter your Password`,
+                required: `Password is required.`,
+                isPassword: `Password must have minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character.`,
+            },
+            confirmPassword: {
+                label: `Confirm your Password`,
+                required: `Password is required.`,
+                sameAsPassword: `Must be the same as password.`,
+            },
+            firstName: {
+                label: `Enter your first name`,
+                required: `First name is required.`,
+                maxLength: `First name should be < 200 caracters.`,
+                minLength: `First name should be > 2 caracters.`,
+            },
+            lastName: {
+                label: `Enter your last name`,
+                required: `Last name is required.`,
+                maxLength: `Last name should be < 200 caracters.`,
+                minLength: `Last name should be > 2 caracters.`,
+            },
+            birthday: {
+                label: `Enter your birthday`,
+                required: `Birthday is required.`,
+            },
+            description: {
+                maxLength: `Description should be < 1000 caracters.`,
+            }
         },
         error: {
             title: `Registration Error !`,

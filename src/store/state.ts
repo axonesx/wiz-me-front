@@ -1,8 +1,9 @@
-import { initialState } from "./mocks"
 import { IRootStoreState } from "./types"
 
 const state: IRootStoreState = {
-    ...initialState,
+    parameters: null,
+    isFetchingParameters: false,
+    globalError: '',
 }
 
 export {

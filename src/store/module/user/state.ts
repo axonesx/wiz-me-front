@@ -1,9 +1,10 @@
+import { initialState } from "./mocks"
 import { IState } from "./types"
 
 const state: IState = {
-    userRequestStatus: '',
+    ...initialState
 }
 
 export default {
-    state,
+    state
 }

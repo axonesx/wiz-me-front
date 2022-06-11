@@ -1,6 +1,6 @@
 interface IState {
-    authStatus: string,
-    logoutStatus: string,
+    authStatus: string
+    logoutStatus: string
 }
 
 export { IState, }

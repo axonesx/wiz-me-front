@@ -23,7 +23,7 @@
         @blur="v$.email.$touch()"
       >
       <template v-slot:label>
-        {{ $t('loginPage.login.form.email') }}
+        {{ $t('loginPage.login.form.email.label') }}
       </template></v-text-field>
       <v-text-field
         v-model="v$.password.$model"
@@ -34,18 +34,27 @@
         @blur="v$.password.$touch()"
       >
       <template v-slot:label>
-        {{ $t('loginPage.login.form.password') }}
+        {{ $t('loginPage.login.form.password.label') }}
       </template></v-text-field>
       <v-btn
         class="mb-6"
         color="success"
         :disabled="valid"
+        :loading="true"
         @click="login"
+        width=150
       >
-      {{ $t('loginPage.login.button') }}
+        <v-progress-circular
+          class='mx-auto'
+          v-if="authStatus==='loading'"
+          indeterminate
+        ></v-progress-circular>
+        <div v-else>{{ $t('loginPage.login.button') }}</div>
       </v-btn>
       <v-divider></v-divider>
-      <span class="mt-6">{{ $t('loginPage.login.registration.span') }}<a href="/sign-up">{{ $t('loginPage.login.registration.link') }}</a></span>
+      <span class="mt-6">{{ $t('loginPage.login.registration.span') }}
+        <a href="/sign-up">{{ $t('loginPage.login.registration.link') }}</a>
+      </span>
     </form>
 
     <v-alert v-if="signUpStatus === 'success'"
@@ -57,11 +66,11 @@
       color="green"
     >
       <template v-slot:title>
-        {{ $t('loginPage.registration.success.title') }}
+        {{ $t('loginPage.login.registration.success.title') }}
       </template>
-        {{ $t('loginPage.registration.success.text') }}
+        {{ $t(signUpMessage) }}
     </v-alert>
-    <v-alert v-if="logoutStatus === 'success'"
+    <!-- <v-alert v-if="logoutStatus === 'success'"
       type="success"
       variant="contained-text"
       closable
@@ -72,8 +81,8 @@
       <template v-slot:title>
         {{ $t('loginPage.logout.success.title') }}
       </template>
-        {{ $t('loginPage.logout.success.text') }}
-    </v-alert>
+        {{ $t('loginPage.logout.success.text') }}}
+    </v-alert> -->
     <v-alert v-if="authStatus === 'error'"
       type="error"
       variant="contained-text"
@@ -83,9 +92,9 @@
       color="red"
     >
       <template v-slot:title>
-        {{ $t('loginPage.logout.success.title') }}
+        {{ $t('loginPage.login.error.title') }}
       </template>
-        {{ $t('loginPage.logout.success.text') }}
+        {{ $t('loginPage.login.error.text') }}
     </v-alert>
   </v-card>
 </template>
@@ -97,14 +106,11 @@ import { store } from '../../store'
 import router from '../../router'
 import { isAllItemsExist } from '../../services/utils.service'
 import { mapGetters } from 'vuex'
-import { useI18n } from 'vue-i18n'
 
 export default {
   setup () {
-    const { t } = useI18n()
     return {
-      t,
-      v$: useVuelidate() 
+      v$: useVuelidate()
     }
   },
 
@@ -133,20 +139,21 @@ export default {
   computed: {
     ...mapGetters({
       signUpStatus: 'getSignUpStatus',
+      signUpMessage: 'getSignUpMessage',
       authStatus: 'getAuthStatus',
       logoutStatus: 'getLogoutStatus',
     }),
     emailErrors () {
       const errors = []
       if (!this.v$.email.$dirty) return errors
-      this.v$.email.required.$invalid && errors.push('Email is required.')
-      this.v$.email.email.$invalid && errors.push('Must be an email')
-      return errors
+      this.v$.email.required.$invalid && errors.push(this.$t('loginPage.login.form.email.required'))
+      this.v$.email.email.$invalid && errors.push(this.$t('loginPage.login.form.email.isEmail'))
+     return errors
     },
     passwordErrors () {
       const errors = []
       if (!this.v$.password.$dirty) return errors
-      this.v$.password.required.$invalid && errors.push('Password is required.')
+      this.v$.password.required.$invalid && errors.push(this.$t('loginPage.login.form.password.required'))
       return errors
     },
   },

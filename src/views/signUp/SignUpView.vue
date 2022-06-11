@@ -14,7 +14,7 @@
         {{ $t('signUpPage.registration.error.title') }}
       </template>
         {{ $t('signUpPage.registration.error.text') }}
-      
+
     </v-alert>
     <v-card-header>
       <v-card-header-text>
@@ -37,11 +37,10 @@
         @blur="v$.email.$touch()"
       >
       <template v-slot:label>
-        {{ $t('signUpPage.registration.form.email') }}
+        {{ $t('signUpPage.registration.form.email.label') }}
       </template></v-text-field>
       <v-text-field
         v-model="v$.password.$model"
-        label="Enter your Password"
         :error-messages="passwordErrors"
         type="password"
         required
@@ -49,11 +48,10 @@
         @blur="v$.password.$touch()"
       >
       <template v-slot:label>
-        {{ $t('signUpPage.registration.form.password') }}
+        {{ $t('signUpPage.registration.form.password.label') }}
       </template></v-text-field>
       <v-text-field
         v-model="v$.confirmPassword.$model"
-        label="Confirme your Password"
         :error-messages="confirmPasswordErrors"
         type="password"
         required
@@ -61,48 +59,73 @@
         @blur="v$.confirmPassword.$touch()"
       >
       <template v-slot:label>
-        {{ $t('signUpPage.registration.form.confirmPassword') }}
+        {{ $t('signUpPage.registration.form.confirmPassword.label') }}
       </template></v-text-field>
       <v-text-field
         v-model="v$.firstName.$model"
-        label="Enter your first Name"
         :error-messages="firstNameErrors"
+        :counter="200"
         required
         @input="v$.firstName.$touch()"
         @blur="v$.firstName.$touch()"
       >
       <template v-slot:label>
-        {{ $t('signUpPage.registration.form.firstName') }}
+        {{ $t('signUpPage.registration.form.firstName.label') }}
       </template></v-text-field>
       <v-text-field
         v-model="v$.lastName.$model"
-        label="Enter your last Name"
         :error-messages="lastNameErrors"
+        :counter="200"
         required
         @input="v$.lastName.$touch()"
         @blur="v$.lastName.$touch()"
       >
       <template v-slot:label>
-        {{ $t('signUpPage.registration.form.lastName') }}
+        {{ $t('signUpPage.registration.form.lastName.label') }}
       </template></v-text-field>
-      <v-card-subtitle>
-        <span class="mr-1">{{ $t('signUpPage.registration.form.birthday') }}</span>
-      </v-card-subtitle>
+
       <Datepicker
         class="mb-6"
-        v-model="date"
-        :enableTimePicker="false"
+        v-model="birthday"
         @blur="disableButton"
         @cleared="disableButton"
-        required
-      />
+        :flow="flow"
+        :format="format"
+        :locale="locale"
+        autoApply
+        :maxDate="now"
+        @update:modelValue="formatDate"
+        :enableTimePicker="false"
+      >
+        <template #trigger>
+            <v-text-field
+              clearable
+              readonly
+              v-model="v$.birthday.$model"
+              :error-messages="birthdayErrors"
+              required
+              @input="v$.birthday.$touch()"
+              @blur="v$.birthday.$touch();disableButton()"
+              @clear="disableButton"
+            >
+          <template v-slot:label>
+            {{ $t('signUpPage.registration.form.birthday.label') }}
+          </template></v-text-field>
+        </template>
+      </Datepicker>
       <v-btn
         class="mb-6"
         color="success"
         :disabled="valid"
         @click="signUp"
+        width=150
       >
-      {{ $t('signUpPage.registration.button') }}
+        <v-progress-circular
+          class='mx-auto'
+          v-if="signUpStatus==='loading'"
+          indeterminate
+        ></v-progress-circular>
+        <div v-else>{{ $t('signUpPage.registration.button') }}</div>
       </v-btn>
       <v-divider></v-divider>
       <span>{{ $t('signUpPage.registration.login.span') }}<a href="/login">{{ $t('signUpPage.registration.login.link') }}</a></span>
@@ -111,15 +134,16 @@
 </template>
 
 <script>
+import { ref } from 'vue'
 import useVuelidate from '@vuelidate/core'
-import { required, email, sameAs } from '@vuelidate/validators'
+import { required, email, sameAs, maxLength, minLength } from '@vuelidate/validators'
 import { store } from '../../store'
 import router from '../../router'
 import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import { isAllItemsExist } from '../../services/utils.service'
 import { mapGetters } from 'vuex'
-import { useI18n } from 'vue-i18n'
+import { formatDateInput, dateFormat } from '../../services/date.service'
 
 const passwordRegex = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
 const isPassword = (value) => value.match(passwordRegex)
@@ -127,9 +151,22 @@ const isPassword = (value) => value.match(passwordRegex)
 export default {
   components: { Datepicker },
   setup () {
-    const { t } = useI18n()
+    const flow = ref(['year', 'month', 'calendar'])
+    function padTo2Digits(num) {
+      return num.toString().padStart(2, '0');
+    }
+    const format = (date) => {
+      return [
+          padTo2Digits(date.getDate()),
+          padTo2Digits(date.getMonth() + 1),
+          date.getFullYear(),
+        ].join('/')
+    }
+    const now = new Date()
     return {
-      t,
+      flow,
+      format,
+      now,
       v$: useVuelidate(),
     }
   },
@@ -141,9 +178,9 @@ export default {
       confirmPassword: '',
       firstName: '',
       lastName: '',
-      date: '',
-      menu: false,
+      birthday: '',
       valid: true,
+      locale: 'fr',
     }
   },
 
@@ -166,22 +203,21 @@ export default {
       },
       firstName: {
           required,
+          maxLength: maxLength(200),
+          minLength: minLength(2),
           $lazy: true
       },
       lastName: {
           required,
+          maxLength: maxLength(200),
+          minLength: minLength(2),
           $lazy: true
       },
-      date: {
+      birthday: {
           required,
           $lazy: true
       },
     }
-  },
-  watch: {
-    menu (val) {
-      val && setTimeout(() => (this.activePicker = 'YEAR'))
-    },
   },
   computed: {
     ...mapGetters({
@@ -190,43 +226,53 @@ export default {
     emailErrors () {
       const errors = []
       if (!this.v$.email.$dirty) return errors
-      this.v$.email.required.$invalid && errors.push('Email is required.')
-      this.v$.email.email.$invalid && errors.push('Must be an email')
+      this.v$.email.required.$invalid && errors.push(this.$t('signUpPage.registration.form.email.required'))
+      this.v$.email.email.$invalid && errors.push(this.$t('signUpPage.registration.form.email.isEmail'))
       return errors
     },
     passwordErrors () {
       const errors = []
       if (!this.v$.password.$dirty) return errors
-      this.v$.password.required.$invalid && errors.push('Password is required.')
-      this.v$.password.isPassword.$invalid && errors.push('Password must have minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character:.')
+      this.v$.password.required.$invalid && errors.push(this.$t('signUpPage.registration.form.password.required'))
+      this.v$.password.isPassword.$invalid && errors.push(this.$t('signUpPage.registration.form.password.isPassword'))
       return errors
     },
     confirmPasswordErrors () {
       const errors = []
       if (!this.v$.confirmPassword.$dirty) return errors
-      this.v$.confirmPassword.required.$invalid && errors.push('Password is required.')
-      this.v$.confirmPassword.sameAsPassword.$invalid && errors.push('Must be the same as password.')
+      this.v$.confirmPassword.required.$invalid && errors.push(this.$t('signUpPage.registration.form.confirmPassword.required'))
+      this.v$.confirmPassword.sameAsPassword.$invalid && errors.push(this.$t('signUpPage.registration.form.confirmPassword.sameAsPassword'))
       return errors
     },
     firstNameErrors () {
       const errors = []
       if (!this.v$.firstName.$dirty) return errors
-      this.v$.firstName.required.$invalid && errors.push('First name is required.')
+      this.v$.firstName.required.$invalid && errors.push(this.$t('signUpPage.registration.form.firstName.required'))
+      this.v$.firstName.maxLength.$invalid && errors.push(this.$t('signUpPage.registration.form.firstName.maxLength'))
+      this.v$.firstName.minLength.$invalid && errors.push(this.$t('signUpPage.registration.form.firstName.minLength'))
       return errors
     },
     lastNameErrors () {
       const errors = []
       if (!this.v$.lastName.$dirty) return errors
-      this.v$.lastName.required.$invalid && errors.push('Last name is required.')
+      this.v$.lastName.required.$invalid && errors.push(this.$t('signUpPage.registration.form.lastName.required'))
+      this.v$.lastName.maxLength.$invalid && errors.push(this.$t('signUpPage.registration.form.lastName.maxLength'))
+      this.v$.lastName.minLength.$invalid && errors.push(this.$t('signUpPage.registration.form.lastName.minLength'))
+      return errors
+    },
+    birthdayErrors () {
+      const errors = []
+      if (!this.v$.birthday.$dirty) return errors
+      this.v$.birthday.required.$invalid && errors.push(this.$t('signUpPage.registration.form.birthday.required'))
       return errors
     },
   },
   methods: {
-    save (date) {
-      this.$refs.menu.save(date)
+    formatDate (date) {
+      this.birthday = formatDateInput(date)
     },
     async disableButton () {
-      const isAllRequiredItemsExist = isAllItemsExist([this.email,this.password,this.confirmPassword,this.firstName,this.lastName,this.date])
+      const isAllRequiredItemsExist = isAllItemsExist([this.email,this.password,this.confirmPassword,this.firstName,this.lastName,this.birthday])
       const isFormCorrect = this.v$.$errors.length === 0 && isAllRequiredItemsExist
       if (isFormCorrect) {
         this.valid=false
@@ -238,7 +284,7 @@ export default {
       const isFormCorrect = await this.v$.$validate()
       if (isFormCorrect) {
         const { email, password, firstName, lastName } = this
-        const birthday = this.date
+        const birthday = dateFormat(this.birthday)
         store.dispatch('signupUser', { email, password, firstName, lastName, birthday } ).then(() => {
           router.push('/')
         })

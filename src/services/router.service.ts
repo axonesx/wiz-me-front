@@ -7,6 +7,17 @@ async function handleFetchParameters() {
     }
 }
 
+async function logout() {
+    store.dispatch('logoutUser')
+}
+
+
+function isAuthenticated(): Promise<boolean> {
+    return store.getters.isAuthenticated
+}
+
 export {
+    isAuthenticated,
     handleFetchParameters,
+    logout,
 }
