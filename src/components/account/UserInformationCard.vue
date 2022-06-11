@@ -1,5 +1,6 @@
 <template>
-  <v-card class="ma-8">
+  <v-card class="ma-8"
+  v-if="user">
     <v-row class="mx-4 mt-2 d-flex align-center justify-space-between">
       <v-col cols="2" class="d-flex justify-center">
       </v-col>

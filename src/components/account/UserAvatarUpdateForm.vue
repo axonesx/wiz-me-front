@@ -16,7 +16,7 @@
           <v-icon
           class="close-icon"
           v-if="cropper"
-          @click="cropper=false;this.files=[]">
+          @click="cropper=false;files=[]">
             mdi-close
           </v-icon>
         </v-card-title>
@@ -35,7 +35,6 @@
                 :stencil-props="{
                   aspectRatio: 1/1
                 }"
-                @change="change"
               />
               <v-file-input
                 v-else
@@ -78,8 +77,8 @@
           <v-btn
             color="blue-darken-1"
             text
-            @click="uploadAvatar"
             :disabled="!valid"
+            @click="uploadAvatar"
           >
             <v-progress-circular
               class='mx-auto'
@@ -153,11 +152,6 @@ export default defineComponent({
     disableButton () {
       this.valid = isAllItemsExist([this.files])
     },
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    change({ coordinates, canvas }) {
-			console.log(coordinates, canvas)
-		},
     loadImage() {
       // Ensure that you have a file before attempting to read it
       this.cropper = true
@@ -197,7 +191,7 @@ export default defineComponent({
 })
 </script>
 
-<style>
+<style scoped>
   .close-icon:hover {
     cursor: pointer;
   }
@@ -209,11 +203,13 @@ export default defineComponent({
   .v-btn--disabled {
     color: grey !important;
   }
+  .v-overlay {
+    padding:0%;
+  }
+</style>
+<style>
   .v-overlay__content {
     max-height: 100% !important;
     max-width: 100% !important;
-  }
-  .v-overlay {
-    padding:0%;
   }
 </style>

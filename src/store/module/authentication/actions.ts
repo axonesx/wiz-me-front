@@ -1,6 +1,6 @@
 import { AUTH_REQUEST, AUTH_SUCCESS, AUTH_ERROR, LOGOUT_REQUEST, LOGOUT_SUCCESS, LOGOUT_ERROR  } from './/mutation-types'
 import { USER_LOGIN, USER_LOGOUT, TOKEN_LOGIN } from '../../module/user/mutation-types'
-import { removeTokenInLocalStorage, setTokenInLocalStorage } from '@/services/local-storage.service'
+import { LocalStorageKeys, removeAllTokens, setTokenInLocalStorage } from '@/services/local-storage.service'
 import { IAction, IActionWithoutPayload } from '@/store/types/action'
 import { httpClientApi } from '@/api/helpers/http-client-api'
 import { IState } from './types'
@@ -13,7 +13,10 @@ const loginUser: IAction<IState, string> = ({ commit }, user) => {
       .then(resp => {
         const xsrfToken = resp.data.xsrfToken
         const maxAge = resp.data.maxAge
-        setTokenInLocalStorage(xsrfToken, maxAge)
+        const refreshToken = resp.data.refreshToken
+        const refreshMaxAge = resp.data.refreshMaxAge
+        setTokenInLocalStorage(LocalStorageKeys.TOKEN, LocalStorageKeys.TOKEN_EXPIRE_IN, xsrfToken, maxAge)
+        setTokenInLocalStorage(LocalStorageKeys.REFRESH_TOKEN, LocalStorageKeys.REFRESH_TOKEN_EXPIRE_IN, refreshToken, refreshMaxAge)
         commit(AUTH_SUCCESS)
         commit(USER_LOGIN, resp.data.findUser)
         commit(TOKEN_LOGIN, resp.data.xsrfToken)
@@ -21,7 +24,7 @@ const loginUser: IAction<IState, string> = ({ commit }, user) => {
       })
     .catch(err => {
       commit(AUTH_ERROR, err)
-      removeTokenInLocalStorage()
+      removeAllTokens()
       reject(err)
     })
   })
@@ -33,7 +36,7 @@ const logoutUser: IActionWithoutPayload<IState> = ({ commit }) => {
     httpClientApi
     .post('/logout')
         .then(resp => {
-          removeTokenInLocalStorage()
+          removeAllTokens()
           commit(USER_LOGOUT)
           commit(LOGOUT_SUCCESS)
           resolve(resp)
@@ -45,15 +48,34 @@ const logoutUser: IActionWithoutPayload<IState> = ({ commit }) => {
   })
 }
 
-const logoutUserFromFront: IActionWithoutPayload<IState> = ({ commit }) => {
-  removeTokenInLocalStorage()
-  commit(USER_LOGOUT)
-  commit(LOGOUT_SUCCESS)
+const reloadToken: IAction<IState, string> = ({ commit, dispatch }, refreshToken) => {
+  return new Promise((resolve, reject) => {
+    commit(AUTH_REQUEST)
+    httpClientApi
+    .post('/reloadToken', {token: refreshToken})
+      .then(resp => {
+        const xsrfToken = resp.data.xsrfToken
+        const maxAge = resp.data.maxAge
+        const refreshToken = resp.data.refreshToken
+        const refreshMaxAge = resp.data.refreshMaxAge
+        setTokenInLocalStorage(LocalStorageKeys.TOKEN, LocalStorageKeys.TOKEN_EXPIRE_IN, xsrfToken, maxAge)
+        setTokenInLocalStorage(LocalStorageKeys.REFRESH_TOKEN, LocalStorageKeys.REFRESH_TOKEN_EXPIRE_IN, refreshToken, refreshMaxAge)
+        commit(AUTH_SUCCESS)
+        commit(TOKEN_LOGIN, xsrfToken)
+        resolve(resp)
+      })
+    .catch(err => {
+      dispatch('logoutUser')
+      commit(AUTH_ERROR, err)
+      removeAllTokens()
+      reject(err)
+    })
+  })
 }
 
 export default {
+    reloadToken,
     loginUser,
-    logoutUserFromFront,
     logoutUser,
 
 }
