@@ -58,7 +58,6 @@
             text
             :disabled="!valid"
             @click="update"
-            width=150
           >
             <v-progress-circular
               class='mx-auto'
