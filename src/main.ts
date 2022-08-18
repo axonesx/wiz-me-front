@@ -1,8 +1,14 @@
+//APP
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import { store } from './store'
+
+//VUETIFY
 import vuetify from './plugins/vuetify'
+import 'vuetify/styles'
+
+//OTHER COMPONENTS
 import { loadFonts } from './plugins/webfontloader'
 import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -10,7 +16,9 @@ import i18n from './i18n'
 
 loadFonts()
 
-createApp(App)
+const app = createApp(App)
+
+app
   .use(i18n)
   .use(router)
   .use(store)

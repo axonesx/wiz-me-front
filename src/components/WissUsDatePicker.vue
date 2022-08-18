@@ -7,7 +7,7 @@
       autoApply
       :minDate="minDate"
       :maxDate="maxDate"
-      :enableTimePicker="false"
+      :enableTimePicker="hour"
       @blur="dateSetted"
       @cleared="dateSetted"
     >
@@ -67,6 +67,10 @@ export default defineComponent ({
     isClearable: {
       type: Boolean,
       default: true,
+    },
+    hour: {
+      type: Boolean,
+      default: false,
     }
   },
 
@@ -103,7 +107,7 @@ export default defineComponent ({
 
   methods: {
     formatDate (dateToFormat: Date): void {
-      this.date = formatDateInput(dateToFormat)
+      this.date = formatDateInput(dateToFormat, this.hour)
     },
     dateSetted (): void {
       this.$emit('dateSetted')

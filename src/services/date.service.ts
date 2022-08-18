@@ -37,10 +37,12 @@ const formatDate = (date: Date): string => {
 }
 
 
-const formatDateInput = (date: Date): string => {
+const formatDateInput = (date: Date, isHour = false): string => {
     if(dayjs.locale() === 'fr') {
+        if(isHour) return dayjs(date).format('DD/MM/YYYY HH:mm')
         return dayjs(date).format('DD/MM/YYYY')
     } else if (dayjs.locale() === 'en') {
+        if(isHour) return dayjs(date).format('MM/DD/YYYY HH:mm')
         return dayjs(date).format('MM/DD/YYYY')
     }
     return dayjs(date).format('DD/MM/YYYY')
