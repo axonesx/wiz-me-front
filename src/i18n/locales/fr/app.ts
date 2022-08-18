@@ -13,4 +13,16 @@ export default {
     monthes: 'mois',
     year: 'an',
     years: 'ans',
+    form: {
+        placeHolder: ``,
+        errors: {
+            required: `Requis`,
+            minLength: `Trop court`,
+            maxLength: `Trop long`,
+        },
+        date: {
+            startDate: `Date de début`,
+            endDate: `Date de fin`,
+        }
+    }
 }

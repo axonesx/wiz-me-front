@@ -8,6 +8,7 @@ import user from './module/user'
 import createPersistedState from "vuex-persistedstate"
 import SecureLS from "secure-ls"
 import { createStore } from "vuex"
+import activity from './module/activity'
 
 const ls = new SecureLS({ isCompression: false })
 
@@ -16,6 +17,7 @@ const conf = {
     user: user,
     auth: authentication,
     reg: registration,
+    activities: activity
   },
   state,
   getters,

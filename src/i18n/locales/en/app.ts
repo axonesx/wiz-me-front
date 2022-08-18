@@ -13,4 +13,16 @@ export default {
     monthes: 'monthes',
     year: 'year',
     years: 'years',
+    form: {
+        placeHolder: ``,
+        errors: {
+            required: `Required`,
+            minLength: `Too short`,
+            maxLength: `Too long`,
+        },
+        date: {
+            startDate: `Start date`,
+            endDate: `End date`,
+        }
+    }
 }

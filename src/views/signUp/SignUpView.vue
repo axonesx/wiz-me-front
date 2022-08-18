@@ -90,7 +90,6 @@
         @blur="disableButton"
         @cleared="disableButton"
         :flow="flow"
-        :format="format"
         :locale="locale"
         autoApply
         :maxDate="now"
@@ -152,20 +151,9 @@ export default {
   components: { Datepicker },
   setup () {
     const flow = ref(['year', 'month', 'calendar'])
-    function padTo2Digits(num) {
-      return num.toString().padStart(2, '0');
-    }
-    const format = (date) => {
-      return [
-          padTo2Digits(date.getDate()),
-          padTo2Digits(date.getMonth() + 1),
-          date.getFullYear(),
-        ].join('/')
-    }
     const now = new Date()
     return {
       flow,
-      format,
       now,
       v$: useVuelidate(),
     }

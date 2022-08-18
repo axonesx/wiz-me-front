@@ -1,3 +1,5 @@
+import { ErrorObject } from "@vuelidate/core"
+
 /**
  * @method isEmpty
  * @param {String | Number | Object} value
@@ -31,7 +33,18 @@ const isAllItemsExist = function(items: string[] | number[] | object[]): boolean
     return isExist
 }
 
+// eslint-disable-next-line
+const formValidation = function (errors:ErrorObject[], items: any[]): boolean {
+  const isAllRequiredItemsExist = isAllItemsExist(items)
+  if (errors.length === 0 && isAllRequiredItemsExist) {
+    return false
+  } else {
+    return true
+  }
+}
+
 export {
     isEmpty,
     isAllItemsExist,
+    formValidation,
 }
